@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 # 2016-04-05 
 
-__auther__ = "youxian_tester <sx.work@outlook.com>"
+__auther__ = "youxian_tester <sx.work@outlook.com->"
 __version__ = "v1.1.0"
 
 import os
@@ -15,26 +15,26 @@ from diagnostics import InfoGathering
 def check_path(directory):
     try:
         if os.path.isdir(directory):
-            print("> The PATH True.")
+            print("-> The PATH True.")
             vapk = [ cv for cv in os.listdir(directory) if os.path.splitext(cv)[1] == '.apk' ]
         if len(vapk) == 0:
             raise NameError
     except IOError:
-        print("> Error: Please check File path")
+        print("-> Error: Please check File path")
 
 #设置渠道版本目录
-new_version_catalogue = str(input("> Please input New App Channel catalogue: "))
+new_version_catalogue = str(raw_input("-> Please input New App Channel catalogue: "))
 check_path(new_version_catalogue)
 
-old_version_catalogue = str(input("> Please input Old App Channel catalogue: "))
+old_version_catalogue = str(raw_input("-> Please input Old App Channel catalogue: "))
 check_path(old_version_catalogue)
 
 #设置要测试的app的包名
-com_package_name = "com.jiuai"
+com_package_name = "com.xinhuan"
 
 #发送随机事件到app
 def run_events():
-    return os.popen("adb shell monkey -p com.jiuai -s 10 \
+    return os.popen("adb shell monkey -p com.xinhuan -s 10 \
         --kill-process-after-error  --monitor-native-crashes \
         --pct-nav 15 --pct-majornav 20 --pct-appswitch 30 --pct-motion 30  --pct-anyevent 5 \
         --throttle 20 -v -v -v 2000")
@@ -47,13 +47,13 @@ def apk_check_before_upgrade(com_package_name):
     #获取手机安装的所有第三方包
     tp = [ plp.strip().split(":")[1] for plp in os.popen("adb shell pm list package -3") ]
     if com_package_name in tp:
-        print("\n Old jiuai app is installed the phone.\n")
+        print("\n Old app is installed the phone.\n")
         #获取apk三个信息：versionName,versionCode,LastUpdatetime
         before_upgrade_version_info = aig.package_info(com_package_name)
         before_upgrade_version_info[0] = com_package_name
-        print("Version Basic info:\n\t {0}".format(before_upgrade_version_info))
+        print("-> Version Basic info:\n\t {0}".format(before_upgrade_version_info))
     else:
-        print("The phone is not installed jiuai old apk.\n")
+        print("-> The phone is not installed old apk.\n")
 
 apk_check_before_upgrade(com_package_name)
 
@@ -136,3 +136,5 @@ with open('upgrade&install_testResult.csv','wb') as f:
     w = csv.writer(f)
     w.writerow(["OldVersionName","old upgrade to New","NewApk","Install_Status","VersionCode","VersionName","LastUpdateTime"])
     w.writerows(test_results)
+
+print(" \n -> Test Result is writing :< upgrade&install_testResult.csv >.\n")

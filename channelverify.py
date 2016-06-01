@@ -7,13 +7,6 @@ __vserion__ = "v1.0"
 ''' 
 通过反编译android apk，获取AndroidManifest.xml文件中的友盟渠道号.
 '''
-print(" +------------------- Script Run ----------------------------+")
-print(" |                                                           |")
-print(" | The Script Run reliance on:                               |")
-print(" |     1) Python 2.7                                         |") 
-print(" |     2) Java                                               |") 
-print(" |                                                           |")                                                
-print(" +-----------------------------------------------------------+")
 
 import os
 import shutil
@@ -23,6 +16,14 @@ import csv
 import time
 from pandas import DataFrame,Series
 import pandas as pd
+
+print(" +------------------- Script Run ----------------------------+")
+print(" |                                                           |")
+print(" | The Script Run reliance on:                               |")
+print(" |     1) Python 2.7                                         |") 
+print(" |     2) Java                                               |") 
+print(" |                                                           |")                                                
+print(" +-----------------------------------------------------------+")
 
 start_time = time.time()
 #设置安卓渠道版本所在目录,ApkTool可不设
