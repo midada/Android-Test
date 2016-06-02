@@ -13,14 +13,17 @@ import csv
 import re
 
 def str_sub(content,num):
-    return content.replace('[','').replace(']','').strip(':')[num]
+    ct = content.replace('[','').replace(']','')
+    return ct.split(':')[num].strip()
 
 for mi in os.popen("adb shell getprop"):
     if "ro.build.fingerprint" in mi:
-        print("Phone: {0}".format(re.split(':',mi)[1].replace('[','').strip()))
-    if "dhcp.wlan0.ipaddress" in mi:
-        print("Ip Address: {0}".format(mi.split(':')[1]))
+        print("Phone: {0}".format(str_sub(mi,1)))
     if "ro.serialno" in mi:
-        print(str_sub(mi,1))
+        print("Serial-number: {0}".format(str_sub(mi,1)))
     if "ro.sf.lcd_density" in mi:
-        print("pixel density: {0}".format(str_sub(mi,1))
+        print("Pixel density: {0}".format(str_sub(mi,1)))
+    if "dhcp.wlan0.ipaddress" in mi:
+        print("Ip Address: {0}".format(str_sub(mi,1)))
+    if "ro.build.version.release" in mi:
+        print("System_Version: {0}".format(str_sub(mi,1)))
