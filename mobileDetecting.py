@@ -20,7 +20,8 @@ def device_detecting():
         for sn in serial_num:
             for mi in os.popen("adb -s {0} shell getprop".format(sn)):
                 if "ro.build.fingerprint" in mi:
-                    phone_brand.append(str_sub(mi,1))
+                    model = str_sub(mi,1).split('/')
+                    phone_brand.append(model[0] + '/' + model[1])
     else:
         print("\n Did not detect any Device.")
     return dict(zip(phone_brand,serial_num))
@@ -33,8 +34,7 @@ def get_phone_sn():
         if phone == k:
             phone_serial_num = info[phone]
             print("\n   %s" % phone_serial_num)
-        else:
-            print("fail")
+            break
     return phone_serial_num
 
 get_phone_sn()
