@@ -36,9 +36,9 @@ com_package_name = "com.jiuai"
 #发送随机事件到app
 def run_events(phone_sn):
     return os.popen("adb -s {0} shell monkey -p com.jiuai -s 10 \
-        --kill-process-after-error  --monitor-native-crashes \
-        --pct-nav 15 --pct-majornav 20 --pct-appswitch 30 --pct-motion 30  --pct-anyevent 5 \
-        --throttle 20 -v -v -v 2000".format(phone_sn))
+     --kill-process-after-error  --monitor-native-crashes --pct-nav 15 \
+     --pct-majornav 20 --pct-appswitch 30 --pct-motion 30  --pct-anyevent 5 \
+     --throttle 20 -v -v -v 2000".format(phone_sn))
 
 #diagnostics文件中的类
 aig = InfoGathering()
@@ -50,7 +50,8 @@ def apk_check_before_upgrade(phone_sn,com_package_name):
     if com_package_name in tp:
         print("\n Old app is installed the phone.\n")
         #获取apk三个信息：versionName,versionCode,LastUpdatetime
-        before_upgrade_version_info = aig.package_info(com_package_name)
+        before_upgrade_version_info = aig.package_info(phone_sn,com_package_name)
+        print(before_upgrade_version_info)
         before_upgrade_version_info[0] = com_package_name
         print(" -> Version Basic info:\n\t {0}".format(before_upgrade_version_info))
     else:
@@ -60,11 +61,10 @@ def apk_check_before_upgrade(phone_sn,com_package_name):
 def install_apk(phone_sn,apkname,com_package_name):
     try:
         install_log = os.popen("adb -s {0} install -r {1}".format(phone_sn,apkname)).read()
-
         if "Success" in pickle.dumps(install_log):
             install_status = 'Success'
             #获取apk三个信息：versionName,versionCode,LastUpdatetime
-            after_upgrade_version_info = aig.package_info(com_package_name)
+            after_upgrade_version_info = aig.package_info(phone_sn,com_package_name)
             after_upgrade_version_info[0] = apkname
             after_upgrade_version_info.insert(1,install_status)
             print("{0} : Upgrade Successful.".format(apkname))
@@ -77,44 +77,47 @@ def install_apk(phone_sn,apkname,com_package_name):
     else:
         # clean Mobile app data
         os.popen("adb -s {0} shell pm clear {1}".format(phone_sn,com_package_name))
+        print(after_upgrade_version_info)
     return after_upgrade_version_info
 
 #选择apk
 def select_apk(directory):
     os.chdir(directory)
     apkname = [ vc for vc in os.listdir(directory) if os.path.splitext(vc)[1] == '.apk']
-    print("---- {0} : There are {1} apk file.\n".format(directory,len(apkname)))
+    print(" -> {0} : There are {1} apk file.".format(directory,len(apkname)))
     return apkname
 
 # 手机清除工作
 def cleanup(phone_sn,package):
-    return os.popen("adb -s {0} uninstall {1}".format(phone_sn,package))
+    return os.system("adb -s {0} uninstall {1}".format(phone_sn,package))
 
 '''
     Upgrade installation verification.
 '''
-def do(phone_sn,odir,ndir,package):
+def do(phone_sn,old_dir,new_dir,package):
     results = []
-    old_apk,new_apk = select_apk(odir),select_apk(ndir)
+    old_apk,new_apk = select_apk(old_dir),select_apk(new_dir)
     #保证两个目录下apk数量相等
     onum,nnew = len(old_apk),len(new_apk)
     if onum < nnew:
         for cp in range(nnew - onum):
             new_apk[random.randrange(nnew)]
             shutil.copy(new_apk[random.randrange(nnew)],odir)
+    else:
+        pass
 
     for (oapk,napk) in zip(old_apk,new_apk):
         try:
             cleanup(phone_sn,package)
             # install old version apk
-            os.chdir(odir)
+            os.chdir(old_dir)
             oresults = install_apk(phone_sn,oapk,package)[:2]
         except:
             print("Fail")
 
         try:
             # install new version apk
-            os.chdir(ndir)
+            os.chdir(new_dir)
             nresults = install_apk(phone_sn,napk,package)
         except:
             print("Fail")
