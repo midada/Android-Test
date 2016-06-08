@@ -37,4 +37,4 @@ def get_phone_sn():
             break
     return phone_serial_num
 
-get_phone_sn()
+#get_phone_sn()
