@@ -3,7 +3,6 @@
 
 import os
 import sys
-import pickle
 
 def str_sub(content,num):
     ct = content.replace('[','').replace(']','')
@@ -12,6 +11,7 @@ def str_sub(content,num):
 def device_detecting():
     """
     Detecting Android Mobile.
+    Objective:解决当多个手机连接电脑，Android adb shell命令使用问题。
     """
     phone_brand = []
     device_list = os.popen(" adb devices -l").read()
@@ -22,7 +22,19 @@ def device_detecting():
                 if "ro.build.fingerprint" in mi:
                     phone_brand.append(str_sub(mi,1))
     else:
-        print("Did not detect any Device.")
+        print("\n Did not detect any Device.")
     return dict(zip(phone_brand,serial_num))
 
-print(device_detecting())
+def get_phone_sn():
+    info = device_detecting()
+    print("\n  %s" % info)
+    phone = raw_input(" \n -> Please input mobile brand to connect:")
+    for k in info.keys():
+        if phone == k:
+            phone_serial_num = info[phone]
+            print("\n   %s" % phone_serial_num)
+        else:
+            print("fail")
+    return phone_serial_num
+
+get_phone_sn()
