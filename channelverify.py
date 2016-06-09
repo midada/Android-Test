@@ -26,6 +26,7 @@ print(" |                                                           |")
 print(" +-----------------------------------------------------------+")
 
 start_time = time.time()
+
 #设置安卓渠道版本所在目录,ApkTool可不设
 #version_catalogue = r"E:\Android App\file"
 version_catalogue = str(raw_input(" -> Please input App Channel catalogue: "))
@@ -123,6 +124,6 @@ def output_test_results():
 output_test_results()
 
 end_time = time.time()
-print("Running Time is: {0}".format(end_time-start_time))
+print(" -> Running Time is: {0}".format(end_time-start_time))
   
 os.system("pause")
