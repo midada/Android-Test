@@ -11,11 +11,15 @@ import random
 import time
 import csv
 from diagnostics import InfoGathering
+from mobileDetecting import get_phone_sn
 
 package_name = "com.jiuai"
 
 #实例化InfoGathering文件中的类
 aig = InfoGathering()
+
+#get mobile sn
+phone_sn = get_phone_sn()
 
 cpu = []
 info = []
@@ -23,8 +27,8 @@ info = []
 #获取内存pss值,cpu
 with open("mem.txt",'w+') as m:  
     for i in range(600): 
-        pss_value = aig.meminfo(package_name)
-        cpu_value = list(aig.cpuinfo(package_name))
+        pss_value = aig.meminfo(phone_sn,package_name)
+        cpu_value = list(aig.cpuinfo(phone_sn,package_name))
         print pss_value,cpu_value
         time.sleep(2)
         cpu.append(cpu_value)
