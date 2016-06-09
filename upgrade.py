@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
-# 2016-04-05 
+# 2016-06-09 
 
 __auther__ = "youxian_tester <sx.work@outlook.com->"
-__version__ = "v1.1.0"
+__version__ = "v1.2"
 
 import os
 import shutil
@@ -13,6 +13,7 @@ import csv
 from diagnostics import InfoGathering
 from mobileDetecting import get_phone_sn
 
+#路径检查
 def check_path(directory):
     try:
         if os.path.isdir(directory):
@@ -22,16 +23,6 @@ def check_path(directory):
             raise NameError
     except IOError:
         print(" -> Error: Please check File path")
-
-#设置渠道版本目录
-new_version_catalogue = str(raw_input(" -> Please input New App Channel catalogue: "))
-check_path(new_version_catalogue)
-
-old_version_catalogue = str(raw_input(" -> Please input Old App Channel catalogue: "))
-check_path(old_version_catalogue)
-
-#设置要测试的app的包名
-com_package_name = "com.jiuai"
 
 #发送随机事件到app
 def run_events(phone_sn):
@@ -55,7 +46,7 @@ def apk_check_before_upgrade(phone_sn,com_package_name):
         before_upgrade_version_info[0] = com_package_name
         print(" -> Version Basic info:\n\t {0}".format(before_upgrade_version_info))
     else:
-        print(" -> The phone is not installed old apk.\n")
+        print(" -> The phone is not installed old apk.")
 
 # 安装apk,并获取信息
 def install_apk(phone_sn,apkname,com_package_name):
@@ -113,14 +104,14 @@ def do(phone_sn,old_dir,new_dir,package):
             os.chdir(old_dir)
             oresults = install_apk(phone_sn,oapk,package)[:2]
         except:
-            print("Fail")
+            print(" Unistall old Apk Fail")
 
         try:
             # install new version apk
             os.chdir(new_dir)
             nresults = install_apk(phone_sn,napk,package)
         except:
-            print("Fail")
+            print(" Install New Apk Fail")
         else:
             #随机monkey事件，检验新app的是否可以正常使用
             run_events(phone_sn) 
@@ -128,6 +119,17 @@ def do(phone_sn,old_dir,new_dir,package):
         results.append(oresults + nresults)
     return results
 
+#设置渠道版本目录
+new_version_catalogue = str(raw_input(" -> Please input New App Channel catalogue: "))
+check_path(new_version_catalogue)
+
+old_version_catalogue = str(raw_input(" -> Please input Old App Channel catalogue: "))
+check_path(old_version_catalogue)
+
+#设置要测试的app的包名
+com_package_name = "com.jiuai"
+
+#获取手机的sn
 phone_sn = get_phone_sn()
 
 apk_check_before_upgrade(phone_sn,com_package_name)
