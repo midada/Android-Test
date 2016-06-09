@@ -23,10 +23,10 @@ class InfoGathering():
         self.op = os.popen
 
     #用dumpsys package com.package得到包基本信息，包括安装信息、包基本信息
-    def package_info(self,apk_package_name):
+    def package_info(self,phone_sn,apk_package_name):
         op = self.op
         versioninfo = [] 
-        for lines in op("adb shell dumpsys package {0}".format(apk_package_name)):
+        for lines in op("adb -s {0} shell dumpsys package {1}".format(phone_sn,apk_package_name)):
             #添加userId字段到list,方便以后其他地段调用
             if 'userId' in lines:
                 versioninfo.append(lines.strip().split("=")[0])
@@ -40,21 +40,21 @@ class InfoGathering():
 
     #内存信息
     #统计pss值（实际使用的物理内存（比例分配共享库占用的内存）
-    def meminfo(self,apk_package_name):
+    def meminfo(self,phone_sn,apk_package_name):
         op = self.op
         pss = ""
         try:
-            meminfo = op("adb shell dumpsys meminfo {0} | grep TOTAL".format(apk_package_name)).read() 
+            meminfo = op("adb -s {0} shell dumpsys meminfo {1} | grep TOTAL".format(phone_sn,apk_package_name)).read() 
             pss = meminfo.split()[1]   
         except IndexError:
             pss = "0"
         return pss
 
     #cpu信息
-    def cpuinfo(self,package_name):
+    def cpuinfo(self,phone_sn,package_name):
         op = self.op
         try:
-            cpuinfo = op("adb shell dumpsys cpuinfo | grep {0}".format(package_name)).read()
+            cpuinfo = op("adb -s {0} shell dumpsys cpuinfo | grep {1}".format(phone_sn,package_name)).read()
             ci = cpuinfo.split()
             cputotal,user,kernel = ci[0],ci[2],ci[5]
         except IndexError:
@@ -74,10 +74,10 @@ class InfoGathering():
     """
 
     #Activity每个页面启动时间       
-    def usagestats(self,package_name):
+    def usagestats(self,phone_sn,package_name):
         om = self.om
         search_keyword = ''.join(package_name + '.activity')
-        om("adb shell dumpsys usagestats | grep {0} > usagestats.log".format(search_keyword))
+        om("adb -s {0} shell dumpsys usagestats | grep {1} > usagestats.log".format(phone_sn,search_keyword))
 
         activity_page_startup_time = []
 
@@ -125,9 +125,9 @@ class InfoGathering():
         return activity_page_startup_time
 
     #获取apk流量信息
-    def flowinfo(self,apk_package_name):
+    def flowinfo(self,phone_sn,apk_package_name):
         om = self.om
-        flowinfo = om("adb shell dumpsys netstats {0}".format(apk_package_name))
+        flowinfo = om("adb -s {0} shell dumpsys netstats {1}".format(phone_sn,apk_package_name))
         return flowinfo
 
 if __name__ == "__main__":
