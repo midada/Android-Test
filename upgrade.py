@@ -11,18 +11,33 @@ import random
 import pickle
 import csv
 from diagnostics import InfoGathering
-from mobileDetecting import get_phone_sn
+from mobileDetecting import device_detecting
+
+#获取手机的sn
+print("\n %s" % device_detecting())
+phone_sn = raw_input(" \n -> Please input mobile brand to connect:")
+#phone_sn = "79AEALJ342EL"
 
 #路径检查
 def check_path(directory):
     try:
         if os.path.isdir(directory):
-            print(" -> The PATH True.")
+            print(" -> The PATH True. \n")
             vapk = [ cv for cv in os.listdir(directory) if os.path.splitext(cv)[1] == '.apk' ]
         if len(vapk) == 0:
             raise NameError
     except IOError:
         print(" -> Error: Please check File path")
+
+#设置渠道版本目录
+new_version_catalogue = str(raw_input(" \n -> Please input New App Channel catalogue: "))
+check_path(new_version_catalogue)
+
+old_version_catalogue = str(raw_input(" -> Please input Old App Channel catalogue: "))
+check_path(old_version_catalogue)
+
+#设置要测试的app的包名
+com_package_name = "com.jiuai"
 
 #发送随机事件到app
 def run_events(phone_sn):
@@ -119,21 +134,10 @@ def do(phone_sn,old_dir,new_dir,package):
         results.append(oresults + nresults)
     return results
 
-#设置渠道版本目录
-new_version_catalogue = str(raw_input(" -> Please input New App Channel catalogue: "))
-check_path(new_version_catalogue)
-
-old_version_catalogue = str(raw_input(" -> Please input Old App Channel catalogue: "))
-check_path(old_version_catalogue)
-
-#设置要测试的app的包名
-com_package_name = "com.jiuai"
-
-#获取手机的sn
-phone_sn = get_phone_sn()
-
+#手机安装前检查
 apk_check_before_upgrade(phone_sn,com_package_name)
 
+#执行测试
 test_results = do(phone_sn,old_version_catalogue,new_version_catalogue,com_package_name)
 print(test_results)
 
