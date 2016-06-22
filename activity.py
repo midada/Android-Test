@@ -5,16 +5,15 @@ import os
 import re
 import csv
 from diagnostics import InfoGathering
-from mobileDetecting import get_phone_sn
 
 #设置apk包名
 package_name = "com.jiuai"
 
+# set phone_sn
+phone_sn = '79AEALJ342EL'
+
 #实例化InfoGathering类
 uss = InfoGathering()
-
-#get phone sn
-phone_sn = get_phone_sn()
 
 with open("usagestats.csv",'wb') as f:
     w = csv.writer(f)
