@@ -24,17 +24,5 @@ def device_detecting():
                     phone_brand.append(model[0] + '/' + model[1])
     else:
         print("\n Did not detect any Device.")
-    return dict(zip(phone_brand,serial_num))
-
-def get_phone_sn():
-    info = device_detecting()
-    print("\n  %s" % info)
-    phone = raw_input(" \n -> Please input mobile brand to connect:")
-    for k in info.keys():
-        if phone == k:
-            phone_serial_num = info[phone]
-            print("\n   %s" % phone_serial_num)
-            break
-    return phone_serial_num
-
-#get_phone_sn()
+    devices_info = dict(zip(phone_brand,serial_num))
+    return devices_info
