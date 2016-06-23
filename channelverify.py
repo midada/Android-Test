@@ -116,7 +116,7 @@ def get_apk_signature(reverse_folder):
     cert_path = "original\META-INF"
     cert = [ os.path.join(version_catalogue,folder,cert_path,'CERT.RSA') for folder in reverse_folder ]
     num = random.randint(0,len(cert))
-    return os.system('keytool.exe -printcert -v -file {0}'.format(cert[num]))
+    return os.popen('keytool.exe -printcert -v -file {0}'.format(cert[num])).read()
 
 #验证签名
 apkname,reverse_folder = decompiler(version_catalogue)
