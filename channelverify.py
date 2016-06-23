@@ -20,12 +20,10 @@ import pandas as pd
 print(" +------------------- Script Run ----------------------------+")
 print(" |                                                           |")
 print(" | The Script Run reliance on:                               |")
-print(" |     1) Python 2.7                                         |") 
+print(" |     1) Python 2.7 、pandas、requests                      |") 
 print(" |     2) Java                                               |") 
 print(" |                                                           |")                                                
 print(" +-----------------------------------------------------------+")
-
-start_time = time.time()
 
 #设置安卓渠道版本所在目录,ApkTool可不设
 #version_catalogue = r"E:\Android App\file"
@@ -41,9 +39,9 @@ try:
     if os.path.isdir(version_catalogue):
     	print(" -> The PATH True.")
     	vapk = [ cv for cv in os.listdir(version_catalogue) if os.path.splitext(cv)[1] == '.apk' ]
-    	print(" -> Total: {0} Apk. ".format(len(vapk)))
+    	print(" -> Total: \033[1;37;42m {0} \33[0m Apk. ".format(len(vapk)))
     if len(vapk) == 0:
-        raise
+        raise 
 except IOError:
     print(" > Error: Please check File path")
 else:
@@ -59,20 +57,23 @@ else:
         print(" -> The Computer is not exists apktools.jar,Will begining Download Apktools.jar......")
         atool.write(requests.get(apktool_download_url).content)
 
+start_time = time.time()
+
 #反编译android apk
 def decompiler(vdir):
     vapk = [ cv for cv in os.listdir(vdir) if os.path.splitext(cv)[1] == '.apk' ]
     print(" -> The Path has found {0} channel version,is in decomopiling,Please wait.....\n".format(len(vapk))) 
-    for apk in vapk:
+    for idx,apk in enumerate(vapk):
         channeldir,extension = os.path.splitext(apk)
         if os.path.isdir(channeldir):
             pass
         else:
-            os.system('java -jar apktool.jar d -s {0}'.format(apk))
+            print(" -> The \033[1;37;44m {0} \33[0m Apk is processing : {1}".format(idx,apk))
+            os.popen('java -jar apktool.jar d -s {0}'.format(apk))
     reverse_apk_folder = [ opf for opf in os.listdir(vdir) if os.path.isdir(opf) ]
     print("-------------------------------------------------------------------")
     print(" -> {0} Finish Apk decompiling.".format(now))
-    print(" -> Total: {0} Apk Floder. ".format(len(reverse_apk_folder)))
+    print(" -> Total: \033[1;32;44m {0} \33[0m Apk Floder. ".format(len(reverse_apk_folder)))
     return vapk,reverse_apk_folder
 
 #遍历反编译后的apk文件夹，通过AndroidManifest.xml文件获取渠道号
@@ -124,6 +125,6 @@ def output_test_results():
 output_test_results()
 
 end_time = time.time()
-print(" -> Running Time is: {0}".format(end_time-start_time))
+print(" -> Running Time is: \033[1;37;42m {0} \33[0m".format(end_time-start_time))
   
 os.system("pause")
