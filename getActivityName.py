@@ -11,7 +11,13 @@ from itertools import islice
 
 package_name = 'com.jiuai'
 
-#Activity每个页面启动时间       
+"""
+2016-06-23
+1.使用此方法可能统计不全activity
+2.三星手机获取存在问题
+"""
+
+#获取app的每个activity  
 def usagestats(package_name):
     search_keyword = ''.join(package_name + '.activity')
     os.popen("adb shell dumpsys usagestats | grep {0} > usagestats.log".format(search_keyword))
@@ -24,4 +30,8 @@ def usagestats(package_name):
             activity_name.append(resp[0].strip())
     return {}.fromkeys(activity_name).keys()
 
-print(usagestats(package_name))
+#创建activity维护列表
+with open("ActivityName_Maintenance.txt","w+") as anm:
+    for idx,activityName in enumerate(usagestats(package_name)):
+        print idx, activityName
+        anm.write(activityName +"\n")
