@@ -6,6 +6,8 @@ __vserion__ = "v1.0"
 
 ''' 
 通过反编译android apk，获取AndroidManifest.xml文件中的友盟渠道号.
+
+环境依赖Java,python2.7(需要安装requests/pandas库)
 '''
 
 import os
@@ -14,20 +16,13 @@ import re
 import requests
 import csv
 import time
+import random
 from pandas import DataFrame,Series
 import pandas as pd
 
-print(" +------------------- Script Run ----------------------------+")
-print(" |                                                           |")
-print(" | The Script Run reliance on:                               |")
-print(" |     1) Python 2.7 、pandas、requests                      |") 
-print(" |     2) Java                                               |") 
-print(" |                                                           |")                                                
-print(" +-----------------------------------------------------------+")
-
 #设置安卓渠道版本所在目录,ApkTool可不设
 #version_catalogue = r"E:\Android App\file"
-version_catalogue = str(raw_input(" -> Please input App Channel catalogue: "))
+version_catalogue = str(raw_input(" \n -> Please input App Channel catalogue: "))
 ApkTool = r"D:\Android\apktool.jar"
 now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 apktool_download_url = 'https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.1.0.jar'
@@ -76,26 +71,66 @@ def decompiler(vdir):
     print(" -> Total: \033[1;32;44m {0} \33[0m Apk Floder. ".format(len(reverse_apk_folder)))
     return vapk,reverse_apk_folder
 
+#处理AndroidManifest.xml文件
+def handling(filename,text):
+    textual_value = ""
+    with open(filename,'r+') as m:
+        line = [ line.strip() for line in m.readlines() if text in line ]
+        for n in line:
+            value = n.split('=')[2]
+            #使用strip过滤"/>//--等特殊字符
+            textual_value = value.strip('"/>// --')
+    return textual_value
+
 #遍历反编译后的apk文件夹，通过AndroidManifest.xml文件获取渠道号
 def get_apk_umeng_value(reverse_folder):
-    umeng_channel = []  
+    #设置要查找的文本
+    text_umeng_channel = "UMENG_CHANNEL"
+    text_umeng_appkey = "UMENG_APPKEY"
+    text_umeng_message_secret = "UMENG_MESSAGE_SECRET"
+    text_easemob_appkey = "EASEMOB_APPKEY"
+    text_amap = "com.amap.api.v2.apikey"
+
+    umeng_channel = []
+    umeng_appkey = []
+    umeng_message_secret = []
+    easemob_appkey = []
+    amap = []
+
     for rfn in reverse_folder:
         manifest = os.path.join(version_catalogue,rfn,'AndroidManifest.xml')
-        with open(manifest,'r+') as m:
-            umeng_line = [ line.strip() for line in m.readlines() if 'UMENG_CHANNEL' in line ]
-            for ul in umeng_line:
-                ucv = ul.split('=')[2]
-                #使用strip过滤"/>//--等特殊字符
-                umeng_channel.append(ucv.strip('"/>// --'))
-    return umeng_channel
+        #友盟渠道号
+        umeng_channel.append(handling(manifest,text_umeng_channel))
+        #友盟appkey
+        umeng_appkey.append(handling(manifest,text_umeng_appkey))
+        #友盟UMENG_MESSAGE_SECRET
+        umeng_message_secret.append(handling(manifest,text_umeng_message_secret))
+        #环信
+        easemob_appkey.append(handling(manifest,text_easemob_appkey))
+        #高德地图
+        amap.append(handling(manifest,text_amap))
+    return umeng_channel,umeng_appkey,umeng_message_secret,easemob_appkey,amap
+
+#验证apk签名
+def get_apk_signature(reverse_folder):
+    cert_path = "original\META-INF"
+    cert = [ os.path.join(version_catalogue,folder,cert_path,'CERT.RSA') for folder in reverse_folder ]
+    num = random.randint(0,len(cert))
+    return os.system('keytool.exe -printcert -v -file {0}'.format(cert[num]))
+
+#验证签名
+apkname,reverse_folder = decompiler(version_catalogue)
+with open("signature.txt",'wb') as s:
+    info = get_apk_signature(reverse_folder)
+    s.writelines(info)
 
 #输出测试结果：将apk渠道号写入csv文件
 def output_test_results():
 
     #获取apk名称和友盟渠道号
     apkname,reverse_folder = decompiler(version_catalogue)
-    umeng_channel_value = get_apk_umeng_value(reverse_folder)
-
+    umeng_channel_value,umeng_appkey_value,umeng_message_secret_value,easemob_appkey_value,amap_value = get_apk_umeng_value(reverse_folder)
+    
     #判断apk名称和友盟渠道值是否对应
     judge_results = []
     for x,y in zip(umeng_channel_value,apkname):
@@ -106,17 +141,22 @@ def output_test_results():
             f = 'False'
             judge_results.append(f)
 
-    test_result = {"ApkName":apkname,"Umeng_Channel":umeng_channel_value,"Results":judge_results}
-    frame = DataFrame(test_result,columns=["ApkName","Umeng_Channel","Results"])
+    test_result = {"APKNAME":apkname,"UMENG_CHANNEL":umeng_channel_value,"CHANNEL_RESULTS":judge_results, \
+                "UMENG_APPKEY":umeng_appkey_value,"UMENG_MESSAGE_SECRET":umeng_message_secret_value,\
+                "EASEMOB_APPKEY":easemob_appkey_value,"AMAP":amap_value}
+    frame = DataFrame(test_result,columns=["APKNAME","UMENG_CHANNEL","CHANNEL_RESULTS","UMENG_APPKEY",
+                    "UMENG_MESSAGE_SECRET","EASEMOB_APPKEY","AMAP"])
     print(frame)
 
-    channel_verify_results = zip(apkname,umeng_channel_value,judge_results)
+    channel_verify_results = zip(apkname,umeng_channel_value,judge_results,\
+            umeng_appkey_value,umeng_message_secret_value,easemob_appkey_value,amap_value)
 
     #将结果写入csv文件
     os.chdir(script_dir)
     with open('Channel_testResult.csv','wb') as f:
         w = csv.writer(f)
-        w.writerow(["Android_Channel_Apk_Name","Umeng_Channel_Value","judge_Results"])
+        w.writerow(["APKNAME","UMENG_CHANNEL","CHANNEL_RESULTS","UMENG_APPKEY",
+                    "UMENG_MESSAGE_SECRET","EASEMOB_APPKEY","AMAP"])
         w.writerows(channel_verify_results)
     
     print(" \n -> Test Result is writing :< Channel_testResult.csv >.\n")
