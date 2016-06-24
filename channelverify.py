@@ -5,9 +5,9 @@ __author__ = "youxian_Tester <sx.work@outlook.com> 2016-04-13"
 __vserion__ = "v1.0"
 
 ''' 
-通过反编译android apk，获取AndroidManifest.xml文件中的友盟渠道号.
-
 环境依赖Java,python2.7(需要安装requests/pandas库)
+
+通过反编译android apk，获取AndroidManifest.xml文件中的渠道号等各项key信息
 '''
 
 import os
@@ -111,18 +111,19 @@ def get_apk_umeng_value(reverse_folder):
         amap.append(handling(manifest,text_amap))
     return umeng_channel,umeng_appkey,umeng_message_secret,easemob_appkey,amap
 
-#验证apk签名
+#随机取签名
 def get_apk_signature(reverse_folder):
     cert_path = "original\META-INF"
     cert = [ os.path.join(version_catalogue,folder,cert_path,'CERT.RSA') for folder in reverse_folder ]
     num = random.randint(0,len(cert))
     return os.popen('keytool.exe -printcert -v -file {0}'.format(cert[num])).read()
 
-#验证签名
+#验证app签名
 apkname,reverse_folder = decompiler(version_catalogue)
-with open("signature.txt",'wb') as s:
-    info = get_apk_signature(reverse_folder)
-    s.writelines(info)
+with open(script_dir + "\\signature.txt",'wb') as s:
+    signature_info = get_apk_signature(reverse_folder)
+    s.writelines(signature_info)
+
 
 #输出测试结果：将apk渠道号写入csv文件
 def output_test_results():
@@ -163,6 +164,9 @@ def output_test_results():
     return channel_verify_results,w
 
 output_test_results()
+
+#打印签名信息
+print(signature_info)
 
 end_time = time.time()
 print(" -> Running Time is: \033[1;37;42m {0} \33[0m".format(end_time-start_time))
