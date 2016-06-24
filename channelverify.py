@@ -37,14 +37,14 @@ try:
     	print(" -> Total: \033[1;37;42m {0} \33[0m Apk. ".format(len(vapk)))
     if len(vapk) == 0:
         raise 
-except IOError:
-    print(" > Error: Please check File path")
+except NameError,OSError,IOError:
+    print(" -> Error: Please check File path")
 else:
     os.chdir(version_catalogue)
     
 #拷贝或下载apktool.jar反编译工具
 if os.path.exists(os.path.join(version_catalogue,'apktool.jar')):
-    print(" -> {0} has found a decompiler apktool.jar.\n".format(version_catalogue))
+    print(" ->{0} Has found a decompiler apktool.jar.\n".format(version_catalogue))
 elif os.path.isfile(ApkTool):
     shutil.copy(ApkTool,version_catalogue)
 else:
