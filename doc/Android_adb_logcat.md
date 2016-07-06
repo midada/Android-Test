@@ -11,9 +11,11 @@ logcat是Android系统的一个命令行工具，主要用来查看和过滤日�
 ## Android logcat介绍
 
 要使用adb命令，首先需要安装Android SDK.adb命令在$ANDROID_HOME/platform-tools目录下.安装好Android SDk并配置好环境变量后，在电脑终端执行：
+
 `$ adb logcat`
 
 或者进入Android手机，执行：
+
 `$ adb shell
 
  $ logcat`
