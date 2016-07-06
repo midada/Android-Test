@@ -17,7 +17,6 @@ logcat是Android系统的一个命令行工具，主要用来查看和过滤日�
 或者进入Android手机，执行：
 
 `$ adb shell
-
  $ logcat`
 
 
