@@ -87,7 +87,7 @@ class InfoGathering():
                 resp = re.split(r"[:|,]",line)
                 #使用islice跳过可迭代对象的元素个数
                 page_time_bucket = dict( [ tb.strip().split("=") for tb in islice(resp,2,None) ] )
-
+                print(resp[0])
                 #Activity时间段统计：
                 time_bucket = ["","","","","","","","","",""]
                 
