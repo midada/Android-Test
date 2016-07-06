@@ -14,6 +14,7 @@ def device_detecting():
     Objective:解决当多个手机连接电脑，Android adb shell命令使用问题。
     """
     phone_brand = []
+    serial_num = []
     device_list = os.popen(" adb devices -l").read()
     if "model" in device_list:
         serial_num = [sn.split()[0] for sn in device_list.split('\n') if sn and not sn.startswith('List')]
@@ -26,3 +27,4 @@ def device_detecting():
         print("\n Did not detect any Device.")
     devices_info = dict(zip(phone_brand,serial_num))
     return devices_info
+#device_detecting()
