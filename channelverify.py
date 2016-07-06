@@ -10,7 +10,7 @@ __vserion__ = "v1.0"
 通过反编译android apk，获取AndroidManifest.xml文件中的渠道号等各项key信息
 '''
 
-import os
+import os,sys
 import shutil
 import re
 import requests
@@ -32,19 +32,21 @@ script_dir = os.getcwd()
 
 try:
     if os.path.isdir(version_catalogue):
-    	print(" -> The PATH True.")
     	vapk = [ cv for cv in os.listdir(version_catalogue) if os.path.splitext(cv)[1] == '.apk' ]
-    	print(" -> Total: \033[1;37;42m {0} \33[0m Apk. ".format(len(vapk)))
-    if len(vapk) == 0:
-        raise 
-except IOError:
-    print(" > Error: Please check File path")
+        if len(vapk) !=0:	
+    	    print(" -> Total: \033[1;37;42m {0} \33[0m Apk. ".format(len(vapk)))
+        else:
+	        print(" -> No has ApkFile.")
+	        raise NameError
+except (NameError,OSError,IOError):
+    print(" -> Error: Please check File PATH.")
+    sys.exit()
 else:
     os.chdir(version_catalogue)
-    
+
 #拷贝或下载apktool.jar反编译工具
 if os.path.exists(os.path.join(version_catalogue,'apktool.jar')):
-    print(" -> {0} has found a decompiler apktool.jar.\n".format(version_catalogue))
+    print(" ->{0} Has found a decompiler apktool.jar.\n".format(version_catalogue))
 elif os.path.isfile(ApkTool):
     shutil.copy(ApkTool,version_catalogue)
 else:
@@ -113,14 +115,14 @@ def get_apk_umeng_value(reverse_folder):
 
 #随机取签名
 def get_apk_signature(reverse_folder):
-    cert_path = "original\META-INF"
+    cert_path = "original//META-INF"
     cert = [ os.path.join(version_catalogue,folder,cert_path,'CERT.RSA') for folder in reverse_folder ]
     num = random.randint(0,len(cert))
     return os.popen('keytool.exe -printcert -v -file {0}'.format(cert[num])).read()
 
 #验证app签名
 apkname,reverse_folder = decompiler(version_catalogue)
-with open(script_dir + "\\signature.txt",'wb') as s:
+with open(script_dir + "//signature.txt",'wb') as s:
     signature_info = get_apk_signature(reverse_folder)
     s.writelines(signature_info)
 
