@@ -2,6 +2,7 @@
 #Python Appium Api
 
 ####  应用安装、删除 
+
 1. 检查应用是否已经安装
 
 `driver.is_app_installed("com.packagename")`
@@ -16,6 +17,7 @@
 
 
 #### 应用操作相关
+
 1. 启动应用
 
 `driver.launch_app()`
@@ -33,6 +35,7 @@
 `driver.background_app(10)`
 
 #### 文件操作相关
+
 1. 从设备中拉出文件
 
 `driver.pull_file('path/filename')`
@@ -44,6 +47,7 @@
  driver.push_file(path,data.encode('base64'))`
 
 #### 屏幕相关
+
 1. 锁定屏幕 
 
 `drvier.lock(10)`
@@ -62,6 +66,7 @@
 action.press(element=e1,x=10,y=10).release().perform()`
 
 ####  键盘相关
+
 1. 在ios上收起 键盘
 
 `driver.hide_keyboard()`
@@ -71,11 +76,13 @@ action.press(element=e1,x=10,y=10).release().perform()`
 `driver.keyevent(176)`
 
 #### 设备相关
+
 1. 摇晃设备
 
 `driver.shake()`
 
 #### 应用上下文
+
 1. 列出所有的可用上下文
 
 `driver.contexts`
@@ -94,6 +101,7 @@ action.press(element=e1,x=10,y=10).release().perform()`
 
 
 #### Activity 相关
+
 1. 获得activity
 
 `driver.current_activity`
