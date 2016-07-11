@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 from appium import webdriver
-import config
+import test_config
 from unittest import TestCase
 from selenium.webdriver.common.by import By
 import unittest
 import time
 import os
 
-class MtcTest(TestCase):
+class TestAndroidJiuai(unittest.TestCase):
     
     def setUp(self):
         config = test_config.get_test_config()
-        uri = config.get_uri()
+        uri = test_config.get_uri()
         self.driver = webdriver.Remote(uri, config)
     
     #app 初始化工作  
@@ -48,3 +48,14 @@ class MtcTest(TestCase):
         width = self.driver.get_window_size()['width']
         height = self.driver.get_window_size()['height']
         self.driver.swipe(width * percent_start_x, height * percent_start_y, width * percent_end_x, height * percent_end_y)
+
+#组织测试用例
+def suite_jiuai():
+    tests = [ 
+              "test_initialize",
+              "test_login"  
+            ]
+    return unittest.TestSuite(map(TestAndroidJiuai,tests))
+
+if __name__ == "__main__":
+    unittest.TextTestRunner(verbosity=2).run(suite_jiuai())
