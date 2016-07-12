@@ -12,5 +12,5 @@ def get_test_config():
 
     return config
 
-def get_uri():
+def get_url():
     return "http://localhost:4723/wd/hub"
