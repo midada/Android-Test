@@ -7,9 +7,7 @@ def get_test_config():
         'deviceName': '1115fb3599a03104',
         'app': "F:\com.jiuai.apk",
         'newCommandTimeout': 30,    
-        'automationName': 'Appium'
-    }
-
+        'automationName': 'Appium' }
     return config
 
 def get_url():
