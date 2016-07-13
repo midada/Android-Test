@@ -50,10 +50,10 @@ class TestAndroidJiuai(unittest.TestCase):
         self.driver.find_element_by_id("com.jiuai:id/tv_identifying_code").click()
         self.driver.find_element_by_id("com.jiuai:id/et_identifying_code").send_keys("1234")
         self.driver.find_element_by_id("com.jiuai:id/et_password").send_keys(password)
+        sleep(2)
+        self.driver.keyevent(66)
         self.driver.find_element_by_id("com.jiuai:id/btn_reg_next").click()
-        sleep(2)
-        self.driver.hide_keyboard()
-        sleep(2)
+        
 
         #register:the second setp
         self.driver.find_element_by_id("com.jiuai:id/et_nickname").send_keys(nickname)
@@ -61,7 +61,7 @@ class TestAndroidJiuai(unittest.TestCase):
         sleep(3)
 
         #register succesful page
-        print(self.driver.current_activity)
+        self.assertEqual(".activity.RegisterRecommendActivity",self.driver.current_activity)
         self.driver.find_element_by_id("com.jiuai:id/btn_go_home").click
 
     #Login:app username login
