@@ -4,6 +4,7 @@
 import os,sys
 import unittest
 import test_config
+from appium_swipe import MobileSwipe
 from time import sleep
 from appium import webdriver
 from unittest import TestCase
@@ -13,25 +14,20 @@ class TestAndroidJiuai(unittest.TestCase):
     
     @classmethod
     def setUpClass(self):
+        #Appium Android settings
         config = test_config.get_test_config()
         url = test_config.get_url()
         self.driver = webdriver.Remote(url, config)
 
-    # def tearDownClass(self):
-    #     self.driver.quit()
-
-    #屏幕滑动
-    def swipe_percent(self, percent_start_x, percent_start_y, percent_end_x, percent_end_y):
-        width = self.driver.get_window_size()['width']
-        height = self.driver.get_window_size()['height']
-        self.driver.swipe(width * percent_start_x, height * percent_start_y, width * percent_end_x, height * percent_end_y)
+        #mobile swipe
+        self.sw = MobileSwipe()
     
     #app:滑动引导页,进入首页  
     def test_initialize(self):
 
         sleep(3)
-        for c in range(3):
-            self.swipe_percent(0.9, 0.5, 0.1, 0.5)
+        for c in range(5):
+            self.sw.left_swipe(self.driver)
         self.driver.find_element_by_xpath("//android.widget.ImageView").click()
         sleep(3)
         self.assertEqual('.activity.MainActivity',self.driver.current_activity)
@@ -64,6 +60,9 @@ class TestAndroidJiuai(unittest.TestCase):
         self.driver.find_element_by_id("com.jiuai:id/btn_confirm_getout").click()
 
         self.driver.find_element_by_id("com.jiuai:id/iv_left_action").click()
+
+    # def tearDownClass(self):
+    #     self.driver.quit()
 
 #组织测试用例
 def suite_jiuai():
