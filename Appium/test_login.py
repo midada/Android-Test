@@ -26,7 +26,7 @@ class TestAndroidJiuai(unittest.TestCase):
         height = self.driver.get_window_size()['height']
         self.driver.swipe(width * percent_start_x, height * percent_start_y, width * percent_end_x, height * percent_end_y)
     
-    #app:引导页  
+    #app:滑动引导页,进入首页  
     def test_initialize(self):
 
         sleep(3)
@@ -34,6 +34,7 @@ class TestAndroidJiuai(unittest.TestCase):
             self.swipe_percent(0.9, 0.5, 0.1, 0.5)
         self.driver.find_element_by_xpath("//android.widget.ImageView").click()
         sleep(3)
+        self.assertEqual('.activity.MainActivity',self.driver.current_activity)
 
     #app:用户登录
     def test_login(self):
