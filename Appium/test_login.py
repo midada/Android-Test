@@ -10,6 +10,11 @@ from appium import webdriver
 from unittest import TestCase
 from selenium.webdriver.common.by import By
 
+#set username data
+username = '13700338877'
+password = 'a123456'
+nickname = 'test13700338877'
+
 class TestAndroidJiuai(unittest.TestCase):
     
     @classmethod
@@ -22,9 +27,8 @@ class TestAndroidJiuai(unittest.TestCase):
         #mobile swipe
         self.sw = MobileSwipe()
     
-    #app:滑动引导页,进入首页  
+    #Swipe:app Guide page 
     def test_initialize(self):
-
         sleep(3)
         for c in range(5):
             self.sw.left_swipe(self.driver)
@@ -32,11 +36,40 @@ class TestAndroidJiuai(unittest.TestCase):
         sleep(3)
         self.assertEqual('.activity.MainActivity',self.driver.current_activity)
 
-    #app:用户登录
+    #Regiter: mobile register
+    #@unittest.skip("No run")
+    def test_register(self):
+        #open register page
+        sleep(3)
+        self.driver.find_element_by_id("com.jiuai:id/rbPersonal").click()
+        self.driver.find_element_by_id("com.jiuai:id/rl_personal_bg").click()
+        self.driver.find_element_by_id("com.jiuai:id/tv_register").click()
+
+        #register:the first step
+        self.driver.find_element_by_id("com.jiuai:id/et_phoneNumber").send_keys(username)
+        self.driver.find_element_by_id("com.jiuai:id/tv_identifying_code").click()
+        self.driver.find_element_by_id("com.jiuai:id/et_identifying_code").send_keys("1234")
+        self.driver.find_element_by_id("com.jiuai:id/et_password").send_keys(password)
+        self.driver.find_element_by_id("com.jiuai:id/btn_reg_next").click()
+        sleep(2)
+        self.driver.hide_keyboard()
+        sleep(2)
+
+        #register:the second setp
+        self.driver.find_element_by_id("com.jiuai:id/et_nickname").send_keys(nickname)
+        self.driver.find_element_by_id("com.jiuai:id/btn_reg_complete").click()
+        sleep(3)
+
+        #register succesful page
+        print(self.driver.current_activity)
+        self.driver.find_element_by_id("com.jiuai:id/btn_go_home").click
+
+    #Login:app username login
+    @unittest.skip("No Run")
     def test_login(self):
 
-        sleep(5)
         #open login page
+        sleep(4)
         self.driver.find_element_by_id("com.jiuai:id/rbPersonal").click()
         self.driver.find_element_by_id("com.jiuai:id/rl_personal_bg").click()
 
@@ -45,13 +78,14 @@ class TestAndroidJiuai(unittest.TestCase):
         self.driver.find_element_by_id("com.jiuai:id/et_password").send_keys("a123456")
         self.driver.find_element_by_id("com.jiuai:id/btn_common_login").click()
 
-        #蒙版
+        #Click the mask
         self.driver.find_element_by_id("com.jiuai:id/linearLayout_mask").click()
 
-        #登录成功后截图
+        #Screenshot: After the successs of the user login
         self.driver.get_screenshot_as_file('login.png')
     
-    #app:我的钱包
+    #MyWallet
+    @unittest.skip("No Run")
     def test_my_wallet(self):    
         
         self.driver.find_element_by_id("com.jiuai:id/option_my_wallet").click()
@@ -68,6 +102,7 @@ class TestAndroidJiuai(unittest.TestCase):
 def suite_jiuai():
     tests = [ 
               "test_initialize",
+              "test_register",
               "test_login",
               "test_my_wallet" 
             ]
