@@ -2,13 +2,13 @@
 #-*- coding:utf-8  -*-
 
 import os,sys
+import unittest
 from time import sleep
 from configparser import ConfigParser
 
 #config.ini
 cfg = ConfigParser()
-cfg.read("config.ini")
-
+cfg.read('config.ini')
 
 """
 func：
@@ -17,38 +17,38 @@ func：
     退出: logout
 """
 
-def register(driver,username,identifying_code,passwod,nickname):
+def register(driver,username,identifying_code,password,nickname):
     #open register page
     sleep(3)
-    driver.find_element_by_id("com.jiuai:id/rbPersonal").click()
-    driver.find_element_by_id("com.jiuai:id/rl_personal_bg").click()
-    driver.find_element_by_id("com.jiuai:id/tv_register").click()
+    driver.find_element_by_id(cfg.get('nav','my')).click()
+    driver.find_element_by_id(cfg.get('my','personal')).click()
+    driver.find_element_by_id(cfg.get('login','tvregister')).click()
 
-    #register:the first step
-    driver.find_element_by_id("com.jiuai:id/et_phoneNumber").send_keys(username)
-    driver.find_element_by_id("com.jiuai:id/tv_identifying_code").click()
-    driver.find_element_by_id("com.jiuai:id/et_identifying_code").send_keys(identifying_code)
-    driver.find_element_by_id("com.jiuai:id/et_password").send_keys(password)
+    #register:the first step 
+    driver.find_element_by_id(cfg.get('login','user')).send_keys(username)
+    driver.find_element_by_id(cfg.get('register','getcode')).click()
+    driver.find_element_by_id(cfg.get('register','inputcode')).send_keys(identifying_code)
+    driver.find_element_by_id(cfg.get('login','pwd')).send_keys(password)
     sleep(2)
     driver.keyevent(66)
-    driver.find_element_by_id("com.jiuai:id/btn_reg_next").click()
+    driver.find_element_by_id(cfg.get('register','reg_next_btn')).click()
         
     #register:the second setp
-    driver.find_element_by_id("com.jiuai:id/et_nickname").send_keys(nickname)
-    driver.find_element_by_id("com.jiuai:id/btn_reg_complete").click()
+    driver.find_element_by_id(cfg.get('register','nickname')).send_keys(nickname)
+    driver.find_element_by_id(cfg.get('register','register_btn')).click()
     sleep(3)
 
     #register succesful page
     assertEqual(".activity.RegisterRecommendActivity",driver.current_activity)
-    driver.find_element_by_id("com.jiuai:id/btn_go_home").click
+    driver.find_element_by_id(cfg.get('register','gohome')).click
 
 
 
 def login(driver,username,password):
     #open login page
     sleep(3)
-    driver.find_element_by_id("com.jiuai:id/rbPersonal").click()
-    driver.find_element_by_id("com.jiuai:id/rl_personal_bg").click()
+    driver.find_element_by_id(cfg.get('nav','my')).click()
+    driver.find_element_by_id(cfg.get('my','personal')).click()
 
     #input mobile and password
     driver.find_element_by_id(cfg.get('login','user')).send_keys(username)
@@ -64,9 +64,9 @@ def login(driver,username,password):
 
 def logout(driver):
     sleep(2)
-    driver.find_element_by_id("com.jiuai:id/option_setting").click()
-    driver.find_element_by_id("com.jiuai:id/btn_logout").click()
+    driver.find_element_by_id(cfg.get('my','setting')).click()
+    driver.find_element_by_id(cfg.get('setting','logout')).click()
 
     #wait 2s
     sleep(2)
-    driver.find_element_by_id("com.jiuai:id/btn_positive").click()
+    driver.find_element_by_id(cfg.get('setting','btn_positive')).click()
