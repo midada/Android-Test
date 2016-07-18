@@ -17,7 +17,7 @@ from configparser import ConfigParser
 
 #config.ini
 cfg = ConfigParser()
-cfg.read('config.ini')
+cfg.read('./conf/config.ini')
 
 #set username data
 username = '18311446031'
