@@ -59,7 +59,7 @@ def login(driver,username,password):
     driver.find_element_by_id("com.jiuai:id/linearLayout_mask").click()
 
     #Screenshot: After the successs of the user login
-    driver.get_screenshot_as_file('login.png')
+    driver.get_screenshot_as_file('screenshot/login.png')
 
 
 def logout(driver):
