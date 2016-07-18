@@ -7,7 +7,7 @@ from configparser import ConfigParser
 
 #config.ini
 cfg = ConfigParser()
-cfg.read('config.ini')
+cfg.read('../config.ini')
 
 """
 func：
