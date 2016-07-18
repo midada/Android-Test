@@ -3,6 +3,11 @@
 
 import os,sys
 from time import sleep
+from configparser import ConfigParser
+
+#config.ini
+cfg = ConfigParser()
+cfg.read('config.ini')
 
 """
 func：
@@ -45,9 +50,9 @@ def login(driver,username,password):
     driver.find_element_by_id("com.jiuai:id/rl_personal_bg").click()
 
     #input mobile and password
-    driver.find_element_by_id("com.jiuai:id/et_phoneNumber").send_keys(username)
-    driver.find_element_by_id("com.jiuai:id/et_password").send_keys(password)
-    driver.find_element_by_id("com.jiuai:id/btn_common_login").click()
+    driver.find_element_by_id(cfg.get('login','user')).send_keys(username)
+    driver.find_element_by_id(cfg.get('login','pwd')).send_keys(password)
+    driver.find_element_by_id(cfg.get('login','loginbtn')).click()
 
     #Click the mask
     driver.find_element_by_id("com.jiuai:id/linearLayout_mask").click()
