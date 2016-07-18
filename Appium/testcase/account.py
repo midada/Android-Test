@@ -7,7 +7,8 @@ from configparser import ConfigParser
 
 #config.ini
 cfg = ConfigParser()
-cfg.read('../conf/config.ini')
+cfg.read(os.path.dirname(sys.path[0]) + 'conf\config.ini')
+
 
 """
 func：
