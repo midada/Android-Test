@@ -12,7 +12,7 @@ from selenium.webdriver.common.by import By
 from appium_swipe import MobileSwipe
 
 import test_config
-from tm_account import login,logout,register
+from testcase.account import login,logout,register
 from configparser import ConfigParser
 
 #config.ini
