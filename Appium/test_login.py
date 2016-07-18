@@ -13,11 +13,6 @@ from appium_swipe import MobileSwipe
 
 import test_config
 from testcase.account import login,logout,register
-from configparser import ConfigParser
-
-#config.ini
-cfg = ConfigParser()
-cfg.read('./conf/config.ini')
 
 #set username data
 username = '18311446031'
