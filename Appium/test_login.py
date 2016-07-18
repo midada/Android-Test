@@ -4,6 +4,7 @@
 import os,sys
 import unittest
 from time import sleep
+from configparser import ConfigParser
 
 from appium import webdriver
 from unittest import TestCase
@@ -15,9 +16,9 @@ import test_config
 from testcase.account import login,logout,register
 
 #set username data
-username = '18311446031'
+username = '18311446051'
 password = 'a123456'
-nickname = 'test13700338727'
+nickname = 'test13700338527'
 identifying_code = '1234'
 
 
@@ -42,11 +43,10 @@ class TestAndroidJiuai(unittest.TestCase):
         sleep(3)
         self.assertEqual('.activity.MainActivity',self.driver.current_activity)
 
-    @unittest.skip("No run")
     def test_register(self):
-        register(self.driver,username,identifying_code,passwod,nickname)
+        register(self.driver,username,identifying_code,password,nickname)
 
-    #@unittest.skip("No Run")
+    @unittest.skip("No Run")
     def test_login(self):
         login(self.driver,username,password)
     
