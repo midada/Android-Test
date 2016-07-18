@@ -9,9 +9,15 @@ from appium import webdriver
 from unittest import TestCase
 from selenium.webdriver.common.by import By
 
-import test_config
 from appium_swipe import MobileSwipe
-from test_account import login,logout,register
+
+import test_config
+from tm_account import login,logout,register
+from configparser import ConfigParser
+
+#config.ini
+cfg = ConfigParser()
+cfg.read('config.ini')
 
 #set username data
 username = '18311446031'
