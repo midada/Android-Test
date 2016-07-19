@@ -6,13 +6,21 @@ import unittest
 from time import sleep
 from appium import webdriver
 
-"""
-解决：上滑、下滑、左滑、右滑    
+# element locators
+# find_element_by_id().click 
+# find_element_by_id().send_keys()
 
-"""
+def el_click(el):
+    return find_element_by_id(el).click()
 
+def el_send_keys(el,data):
+    return find_element_by_id(el).send_keys(data)
+
+
+# Swipe: Left Right Up Down
 class MobileSwipe():
-
+    """解决：上滑、下滑、左滑、右滑 
+    """
     def __init__(self):
         pass
 
