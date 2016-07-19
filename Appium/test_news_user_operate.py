@@ -20,16 +20,18 @@ cfg = ConfigParser()
 cfg.read('config.ini')
 
 # set username data
-username = '18921445511'
+username = '18931945511'
 password = 'a123456'
-nickname = 'test18921445511'
+nickname = 'test18931945511'
 identifying_code = '1234'
 
 
 class TestAndroidJiuai(unittest.TestCase):
-    """ 验证新用户注册后的操作：
-        1. 新用户注册
-        2. 首页刷新
+    """ Test:
+        No 1. skip app Guide page
+        No 2. New user register
+        No 3. Home Page refresh
+        No 4. Add Address
     """
     
     @classmethod
