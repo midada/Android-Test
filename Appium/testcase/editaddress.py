@@ -49,3 +49,4 @@ def add_address(driver):
     el_click(driver,cfg.get('address','cnee_commit'))
 
     el_click(driver,cfg.get('action','back'))
+    el_click(driver,cfg.get('action','home'))
