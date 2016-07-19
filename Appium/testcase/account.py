@@ -11,7 +11,7 @@ cfg = ConfigParser()
 cfg.read('config.ini')
 
 """
-func：
+Func：
     登录: login
     注册: register
     退出: logout
@@ -39,10 +39,12 @@ def register(driver,username,identifying_code,password,nickname):
     sleep(3)
 
     #register succesful page
-    assertEqual(".activity.RegisterRecommendActivity",driver.current_activity)
-    driver.find_element_by_id(cfg.get('register','gohome')).click
-
-
+    #assert ".activity.RegisterRecommendActivity" in driver.current_activity
+    #sleep(2)
+    driver.get_screenshot_as_file('screenshot/go_home.png')
+    #driver.find_element_by_xpath("//android.widget.LinearLayout[@index='5']/ImageView").click()
+    driver.find_element_by_id(cfg.get('register','gohome')).click()
+    sleep(2)
 
 def login(driver,username,password):
     #open login page
