@@ -7,22 +7,30 @@ from time import sleep
 from configparser import ConfigParser
 
 from appium import webdriver
-from unittest import TestCase
 from selenium.webdriver.common.by import By
 
-from appium_swipe import MobileSwipe
-
 import test_config
+import screenshot
+from common import MobileSwipe
 from testcase.account import login,logout,register
+from testcase.editaddress import add_address
 
-#set username data
-username = '18311446051'
+# set config.ini
+cfg = ConfigParser()
+cfg.read('config.ini')
+
+# set username data
+username = '18921445511'
 password = 'a123456'
-nickname = 'test13700338527'
+nickname = 'test18921445511'
 identifying_code = '1234'
 
 
 class TestAndroidJiuai(unittest.TestCase):
+    """ 验证新用户注册后的操作：
+        1. 新用户注册
+        2. 首页刷新
+    """
     
     @classmethod
     def setUpClass(self):
@@ -34,7 +42,7 @@ class TestAndroidJiuai(unittest.TestCase):
         #mobile swipe
         self.sw = MobileSwipe()
     
-    #Swipe:app Guide page 
+    # Swipe:app Guide page 
     def test_initialize(self):
         sleep(3)
         for c in range(5):
@@ -43,32 +51,31 @@ class TestAndroidJiuai(unittest.TestCase):
         sleep(3)
         self.assertEqual('.activity.MainActivity',self.driver.current_activity)
 
+    # User Register
     def test_register(self):
         register(self.driver,username,identifying_code,password,nickname)
 
-    @unittest.skip("No Run")
-    def test_login(self):
-        login(self.driver,username,password)
-    
-    @unittest.skip("No Run")
-    def test_my_wallet(self):     
-        self.driver.find_element_by_id("com.jiuai:id/option_my_wallet").click()
-        self.driver.find_element_by_id("com.jiuai:id/ll_takeout_cash").click()
-        self.driver.find_element_by_id("com.jiuai:id/et_cash_to_getout").send_keys("0.01")
-        self.driver.find_element_by_id("com.jiuai:id/btn_confirm_getout").click()
+    # Home Page: Refresh
+    @unittest.skip("NO Run")
+    def test_home_refresh(self):
+        self.driver.find_element_by_id(cfg.get('nav','main')).click()
+        for c in range(100):
+            self.sw.down_swipe(self.driver)
 
-        self.driver.find_element_by_id("com.jiuai:id/iv_left_action").click()
+    # Edit Address
+    def test_add_address(self):
+        add_address(self.driver)
 
     # def tearDownClass(self):
     #     self.driver.quit()
 
-#组织测试用例
+# texture testcase
 def suite_jiuai():
     tests = [ 
               "test_initialize",
               "test_register",
-              "test_login",
-              "test_my_wallet" 
+              "test_home_refresh",
+              "test_add_address"
             ]
     return unittest.TestSuite(map(TestAndroidJiuai,tests))
 
