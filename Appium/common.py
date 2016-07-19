@@ -10,11 +10,11 @@ from appium import webdriver
 # find_element_by_id().click 
 # find_element_by_id().send_keys()
 
-def el_click(el):
-    return find_element_by_id(el).click()
+def el_click(driver,el):
+    return driver.find_element_by_id(el).click()
 
-def el_send_keys(el,data):
-    return find_element_by_id(el).send_keys(data)
+def el_send_keys(driver,el,data):
+    return driver.find_element_by_id(el).send_keys(data)
 
 
 # Swipe: Left Right Up Down
