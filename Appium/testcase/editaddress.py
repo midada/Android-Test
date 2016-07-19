@@ -5,7 +5,6 @@ import os,sys
 import unittest
 from time import sleep
 from configparser import ConfigParser
-from common import el_click
 
 #config.ini
 cfg = ConfigParser()
@@ -19,5 +18,11 @@ TestCase:
 """
 
 def add_address(driver):
-    driver.el_click(cf.get('my','edit_profile'))
-    driver.el_click(cf.get('my','address'))
+    sleep(1)
+    driver.find_element_by_id(cfg.get('nav','my')).click()
+    try:
+        driver.find_element_by_id("com.jiuai:id/linearLayout_mask").click()
+    except NoSuchElementException:
+        pass
+    driver.find_element_by_id(cfg.get('my','edit_profile')).click()
+    driver.find_element_by_id(cfg.get('personal_data','address')).click()
