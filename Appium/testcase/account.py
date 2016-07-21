@@ -58,6 +58,7 @@ def login(driver,username,password):
     driver.find_element_by_id(cfg.get('login','loginbtn')).click()
 
     #Click the mask
+    sleep(2)
     driver.find_element_by_id("com.jiuai:id/linearLayout_mask").click()
 
     #Screenshot: After the successs of the user login
