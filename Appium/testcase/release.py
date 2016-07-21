@@ -4,6 +4,8 @@
 import os,sys
 import unittest
 from time import sleep
+
+from appium import webdriver
 from configparser import ConfigParser
 
 from common import el_click,el_send_keys
@@ -14,8 +16,7 @@ cfg = ConfigParser()
 cfg.read('config.ini')
 
 """
-    TestCase:
-    No 1. 商品发布
+    TestCase:商品发布
 """
 sw = MobileSwipe()
 
@@ -24,7 +25,26 @@ goods_describe = u'PRO 6采用了压力感应屏幕，魅族称其为3D Press，
 goods_original_price = '1999'
 goods_sale_price = '1200'
 
+# 手机类商品属性规格
+def goods_attribute(dirver):
+    el_click(driver,cfg.get('release','goods_attribute'))
 
+    driver.find_element_by_xpath("//android.widget.TextView[@text,'16G']").click()
+    driver.find_element_by_xpath("//android.widget.TextView[@text,'维修']").click()
+    driver.find_element_by_xpath("//android.widget.TextView[@text,'在保']").click()
+    driver.find_element_by_xpath("//android.widget.TforextView[@text,'外观完好']").click()
+    driver.find_element_by_xpath("//android.widget.TextView[@text,'正常显示']").click()
+
+    for c in range(3):
+        sw.down_swipe(driver)
+
+    driver.find_element_by_xpath("//android.widget.TforextView[@text,'大陆国行']").click()
+    driver.find_element_by_xpath("//android.widget.TextView[@text,'拆封']").click()
+
+    el_click(driver,cfg.get('release','complete'))
+
+
+# 商品发布
 def release_goods(driver):
     el_click(driver,cfg.get('release','main_release'))
 
@@ -49,6 +69,9 @@ def release_goods(driver):
     # 分类：二级
     #driver.find_element_by_xpath("//android.widget.TextView[0]").click()
 
+    # 选择商品是否全新
+    el_click(driver,cfg.get('release','new'))
+
     # 填写商品描述
     el_send_keys(driver,cfg.get('release','goods_describe'),goods_describe)
 
@@ -56,21 +79,26 @@ def release_goods(driver):
     el_click(driver,cfg.get('release','goods_location'))
     el_click(driver,cfg.get('release','goods_location_btn'))
 
-    # 选择商品是否全新
-    el_click(driver,cfg.get('release','new'))
-    
-    for c in range(5):
-        sw.left_swipe(driver)
+    for c in range(3):
+        sw.down_swipe(driver)
 
     # 商品原价、商品售价、是否包邮
+    sleep(2)
     el_send_keys(driver,cfg.get('release','goods_original_price'),goods_original_price)
     el_send_keys(driver,cfg.get('release','goods_sale_price'),goods_sale_price)
     el_click(driver,cfg.get('release','free_postage'))
 
     # 点击确定发布或下一步
     try:
-        el_click(driver,cfg.get('release','determine_release_btn'))
-    except NoSuchElementException:
         el_click(driver,cfg.get('release','release_next'))
+        # 选择品牌
+        el_click(driver,cfg.get('release','choice_brand'))
+        driver.find_element_by_xpath("//android.widget.TextView[@text,'Apple / 苹果']")
+        sleep(2)
+
+        goods_attribute(driver)
+    except NoSuchElementException:
+        pass
+        el_click(driver,cfg.get('release','determine_release_btn'))        
 
 
