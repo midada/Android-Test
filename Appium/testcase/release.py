@@ -40,7 +40,7 @@ def release_goods(driver):
     el_send_keys(driver,cfg.get('release','goods_title'),goods_title)
 
     # set Goods Type
-    el_click(driver,cfg.get('release','goods_type'))
+    # el_click(driver,cfg.get('release','goods_type'))
 
     # 分类: 一级
     #driver.find_element_by_xpath('//android.widget.FrameLayout[0]').click()
@@ -49,16 +49,23 @@ def release_goods(driver):
     # 分类：二级
     #driver.find_element_by_xpath("//android.widget.TextView[0]").click()
 
-    el_click(driver,"com.jiuai:id/tv_goods_classification_name")
-    el_click(driver,cfg.get('action','back'))
+    # 填写商品描述
+    el_send_keys(driver,cfg.get('release','goods_describe'),goods_describe)
+
+    # 商品所在地
+    el_click(driver,cfg.get('release','goods_location'))
+    el_click(driver,cfg.get('release','goods_location_btn'))
 
     # 选择商品是否全新
-    el_click(driver,cfg.get('release','no_new'))
+    el_click(driver,cfg.get('release','new'))
+    
+    for c in range(5):
+        sw.left_swipe(driver)
 
-    # 填写商品描述、商品原价、商品售价
-    el_send_keys(driver,cfg.get('release','goods_describe'),goods_describe)
+    # 商品原价、商品售价、是否包邮
     el_send_keys(driver,cfg.get('release','goods_original_price'),goods_original_price)
     el_send_keys(driver,cfg.get('release','goods_sale_price'),goods_sale_price)
+    el_click(driver,cfg.get('release','free_postage'))
 
     # 点击确定发布或下一步
     try:
