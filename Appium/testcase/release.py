@@ -4,9 +4,10 @@
 import os,sys
 import unittest
 from time import sleep
+from configparser import ConfigParser
 
 from appium import webdriver
-from configparser import ConfigParser
+from appium.webdriver.common.touch_action import TouchAction
 
 from common import el_click,el_send_keys
 from common import MobileSwipe

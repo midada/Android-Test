@@ -7,6 +7,7 @@ from time import sleep
 from configparser import ConfigParser
 
 from appium import webdriver
+from appium.webdriver.common.touch_action import TouchAction
 from selenium.webdriver.common.by import By
 
 import test_config
