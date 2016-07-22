@@ -29,17 +29,17 @@ goods_sale_price = '1200'
 def goods_attribute(dirver):
     el_click(driver,cfg.get('release','goods_attribute'))
 
-    driver.find_element_by_xpath("//android.widget.TextView[@text,'16G']").click()
-    driver.find_element_by_xpath("//android.widget.TextView[@text,'维修']").click()
-    driver.find_element_by_xpath("//android.widget.TextView[@text,'在保']").click()
-    driver.find_element_by_xpath("//android.widget.TforextView[@text,'外观完好']").click()
-    driver.find_element_by_xpath("//android.widget.TextView[@text,'正常显示']").click()
+    driver.find_element_by_xpath("//android.widget.TextView[contains(@text,'16G'])").click()
+    driver.find_element_by_xpath("//android.widget.TextView[contains(@text,'维修'])").click()
+    driver.find_element_by_xpath("//android.widget.TextView[contains(@text,'在保'])").click()
+    driver.find_element_by_xpath("//android.widget.TforextView[contains(@text,'外观完好'])").click()
+    driver.find_element_by_xpath("//android.widget.TextView[contains(@text,'正常显示'])").click()
 
     for c in range(3):
         sw.down_swipe(driver)
 
-    driver.find_element_by_xpath("//android.widget.TforextView[@text,'大陆国行']").click()
-    driver.find_element_by_xpath("//android.widget.TextView[@text,'拆封']").click()
+    driver.find_element_by_xpath("//android.widget.TforextView[contains(@text,'大陆国行'])").click()
+    driver.find_element_by_xpath("//android.widget.TextView[contains(@text,'拆封'])").click()
 
     el_click(driver,cfg.get('release','complete'))
 
@@ -60,14 +60,14 @@ def release_goods(driver):
     el_send_keys(driver,cfg.get('release','goods_title'),goods_title)
 
     # set Goods Type
-    # el_click(driver,cfg.get('release','goods_type'))
+    el_click(driver,cfg.get('release','goods_type'))
 
     # 分类: 一级
-    #driver.find_element_by_xpath('//android.widget.FrameLayout[0]').click()
+    driver.find_element_by_xpath('//android.widget.FrameLayout[0]').click()
     sleep(5)
 
-    # 分类：二级
-    #driver.find_element_by_xpath("//android.widget.TextView[0]").click()
+    #分类：二级
+    driver.find_element_by_xpath("//android.widget.TextView[contains(@text,'手机'])").click()
 
     # 选择商品是否全新
     el_click(driver,cfg.get('release','new'))
@@ -93,7 +93,7 @@ def release_goods(driver):
         el_click(driver,cfg.get('release','release_next'))
         # 选择品牌
         el_click(driver,cfg.get('release','choice_brand'))
-        driver.find_element_by_xpath("//android.widget.TextView[@text,'Apple / 苹果']")
+        driver.find_element_by_xpath("//android.widget.TextView[contains(@text,'Apple'])")
         sleep(2)
 
         goods_attribute(driver)
