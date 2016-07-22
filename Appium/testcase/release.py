@@ -25,6 +25,14 @@ goods_describe = u'PRO 6采用了压力感应屏幕，魅族称其为3D Press，
 goods_original_price = '1999'
 goods_sale_price = '1200'
 
+
+# 录制视频
+def video_recording(driver):
+    el_click(driver,cfg.get('release','add_video'))
+
+    action = TouchAction(driver)
+    action.perform(long_press(driver.find_element_by_id(cfg.get('release','capture'))))
+
 # 手机类商品属性规格
 def goods_attribute(dirver):
     el_click(driver,cfg.get('release','goods_attribute'))
@@ -51,7 +59,7 @@ def release_goods(driver):
     # 选择照片
     try:
         el_click(driver,cfg.get('release','select_photo'))
-    except NoSuchElementException:
+    except:
         pass
     finally:
         el_click(driver,cfg.get('release','ok'))
@@ -63,17 +71,20 @@ def release_goods(driver):
     el_click(driver,cfg.get('release','goods_type'))
 
     # 分类: 一级
-    driver.find_element_by_xpath('//android.widget.FrameLayout[0]').click()
+    # driver.find_element_by_xpath('//android.widget.FrameLayout[0]').click()
     sleep(5)
 
     #分类：二级
-    driver.find_element_by_xpath("//android.widget.TextView[contains(@text,'手机'])").click()
+    #driver.find_element_by_xpath("//android.widget.TextView[contains(@text,'手机'])").click()
 
     # 选择商品是否全新
     el_click(driver,cfg.get('release','new'))
 
     # 填写商品描述
     el_send_keys(driver,cfg.get('release','goods_describe'),goods_describe)
+
+    # 增加视频
+    video_recording(driver)
 
     # 商品所在地
     el_click(driver,cfg.get('release','goods_location'))
@@ -97,7 +108,7 @@ def release_goods(driver):
         sleep(2)
 
         goods_attribute(driver)
-    except NoSuchElementException:
+    except:
         pass
         el_click(driver,cfg.get('release','determine_release_btn'))        
 
