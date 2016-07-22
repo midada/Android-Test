@@ -29,10 +29,14 @@ goods_sale_price = '1200'
 
 # 录制视频
 def video_recording(driver):
-    el_click(driver,cfg.get('release','add_video'))
-
+    #el_click(driver,cfg.get('release','add_video'))
+    sleep(3)
+    el = driver.find_element_by_id(cfg.get('release','capture_btn'))
     action = TouchAction(driver)
-    action.perform(long_press(driver.find_element_by_id(cfg.get('release','capture'))))
+    action.long_press(el).wait(1000).perform()
+    sleep(1)
+    el_click(cfg.get('release','capture_finish'))
+    sleep(5)
 
 # 手机类商品属性规格
 def goods_attribute(dirver):
