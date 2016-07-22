@@ -33,9 +33,9 @@ def video_recording(driver):
     sleep(3)
     el = driver.find_element_by_id(cfg.get('release','capture_btn'))
     action = TouchAction(driver)
-    action.long_press(el).wait(1000).perform()
+    action.long_press(el,None,None,10000).perform()
     sleep(1)
-    el_click(cfg.get('release','capture_finish'))
+    el_click(driver,cfg.get('release','capture_finish'))
     sleep(5)
 
 # 手机类商品属性规格
