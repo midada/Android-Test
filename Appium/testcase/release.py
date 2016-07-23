@@ -60,7 +60,9 @@ def add_photo(driver):
             在选择图片页面,从上到下,第一张照片: FrameLayout为[1]
     """
     try:
-        screenshot(driver,'screenshot/Release_Photo_init_page.png')
+        el_click(driver,cfg.get('release','main_release'))
+        sleep(1)
+        screenshot(driver,'screenshot/Release_1_Photo_init_page.png')
 
         sleep(1)
         el = "//android.widget.GridView[1]/android.widget.FrameLayout[2]/android.widget.CheckBox"
@@ -70,9 +72,9 @@ def add_photo(driver):
     except:
         return False
     else:
-        screenshot(driver,'screenshot/Release_Photo_choice_finish.png')
+        screenshot(driver,'screenshot/Release_1_Photo_choice_finish.png')
         el_click(driver,cfg.get('release','ok'))
-        screenshot(driver,'screenshot/Release_Photo_release.png')
+        screenshot(driver,'screenshot/Release_1_Photo_release.png')
 
 # 录制视频
 def add_video(driver):
