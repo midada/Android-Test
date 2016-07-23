@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
-def get_test_config():
+from appium import webdriver
+
+def test_start():
     config = {
         'platformName': 'Android',
         'platformVersion': '6.0',
@@ -10,7 +12,5 @@ def get_test_config():
         'automationName': 'Appium',
         'unicodeKeyboard':True,
         'resetKeyboard':True}
-    return config
 
-def get_url():
-    return "http://localhost:4723/wd/hub"
+    return  webdriver.Remote('http://localhost:4723/wd/hub', config)
