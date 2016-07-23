@@ -20,7 +20,7 @@ def intro(driver):
 
         driver.get_screenshot_as_file("screensot/intro_1.png")
         driver.find_element_by_xpath("//android.widget.ImageView").click()
-        sleep(2)
     except:
         pass
-
+    finally:
+        sleep(2)
