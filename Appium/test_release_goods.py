@@ -10,8 +10,8 @@ from appium import webdriver
 from appium.webdriver.common.touch_action import TouchAction
 from selenium.webdriver.common.by import By
 
-import test_config
 import screenshot
+from test_config import test_start
 from common import MobileSwipe
 from testcase.account import login
 from testcase.release import release_goods
@@ -35,9 +35,7 @@ class TestAndroidJiuai(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         #Appium Android settings
-        config = test_config.get_test_config()
-        url = test_config.get_url()
-        self.driver = webdriver.Remote(url, config)
+        self.driver = test_start()
 
         #mobile swipe
         self.sw = MobileSwipe()
