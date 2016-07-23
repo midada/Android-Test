@@ -29,14 +29,17 @@ goods_sale_price = '1200'
 
 # 录制视频
 def video_recording(driver):
-    #el_click(driver,cfg.get('release','add_video'))
-    sleep(3)
-    el = driver.find_element_by_id(cfg.get('release','capture_btn'))
-    action = TouchAction(driver)
-    action.long_press(el,None,None,10000).perform()
-    sleep(1)
-    el_click(driver,cfg.get('release','capture_finish'))
-    sleep(5)
+    try:
+        #el_click(driver,cfg.get('release','add_video'))
+        sleep(3)
+        el = driver.find_element_by_id(cfg.get('release','capture_btn'))
+        action = TouchAction(driver)
+        action.long_press(el,None,None,10000).perform()
+        sleep(1)
+        el_click(driver,cfg.get('release','capture_finish'))
+        sleep(5)
+    except:
+        pass
 
 # 手机类商品属性规格
 def goods_attribute(dirver):
@@ -76,11 +79,11 @@ def release_goods(driver):
     el_click(driver,cfg.get('release','goods_type'))
 
     # 分类: 一级
-    # driver.find_element_by_xpath('//android.widget.FrameLayout[0]').click()
+    driver.find_element_by_xpath('//android.widget.FrameLayout[5]').click()
     sleep(5)
 
     #分类：二级
-    #driver.find_element_by_xpath("//android.widget.TextView[contains(@text,'手机'])").click()
+    driver.find_element_by_xpath("//android.widget.FrameLayout[2]/android.widget.LinearLayout[1]/android.widget.ListView[2]/android.widget.FrameLayout[1]/android.widget.RelativeLayout[1]").click()
 
     # 选择商品是否全新
     el_click(driver,cfg.get('release','new'))
@@ -114,7 +117,6 @@ def release_goods(driver):
 
         goods_attribute(driver)
     except:
-        pass
         el_click(driver,cfg.get('release','determine_release_btn'))        
 
 
