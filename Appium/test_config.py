@@ -5,7 +5,7 @@ def get_test_config():
         'platformName': 'Android',
         'platformVersion': '6.0',
         'deviceName': '1115fb3599a03104',
-        'app': "F:\com.jiuai.apk",
+        'app': "/Users/xiaohutu/Documents/com.jiuai.apk",
         'newCommandTimeout': 30,    
         'automationName': 'Appium',
         'unicodeKeyboard':True,
