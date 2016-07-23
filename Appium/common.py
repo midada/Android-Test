@@ -13,9 +13,11 @@ from appium import webdriver
 def el_click(driver,el):
     return driver.find_element_by_id(el).click()
 
+def el_xpath_click(driver,el):
+    return driver.find_element_by_xpath(el).click()
+
 def el_send_keys(driver,el,data):
     return driver.find_element_by_id(el).send_keys(data)
-
 
 # Swipe: Left Right Up Down
 class MobileSwipe():
