@@ -9,9 +9,9 @@ from configparser import ConfigParser
 from appium import webdriver
 from selenium.webdriver.common.by import By
 
-import test_config
 import screenshot
 from common import MobileSwipe
+from test_config import test_start
 from testcase.account import login,logout,register
 from testcase.editaddress import add_address
 
@@ -37,9 +37,7 @@ class TestAndroidJiuai(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         #Appium Android settings
-        config = test_config.get_test_config()
-        url = test_config.get_url()
-        self.driver = webdriver.Remote(url, config)
+        self.driver = test_start()
 
         #mobile swipe
         self.sw = MobileSwipe()
