@@ -126,13 +126,17 @@ def choice_brand(driver):
     else:
         screenshot(driver,'screenshot/Release_Brand_select_finish.png')
 
+def goods_attribute_select(driver):
+    el_storage = "//android.widget.LinearLayout[5]/android.widget.GridView[1]/android.widget.LinearLayout[2]/android.widget.CheckBox[1]"
+    el_xpath_click(driver,el_storage)
+
 # 手机类商品属性规格
 def goods_attribute(driver):
     try:
         el_click(driver,cfg.get('release','goods_attribute'))
         screenshot(driver,'screenshot/Release_GoodsAttribute_init_page.png')
 
-        el_storage = "//android.widget.GridView[1]/android.widget.LinearLayout[2]/android.widget.CheckBox[1]"
+        el_storage = "//android.widget.LinearLayout[1]/android.widget.GridView[1]/android.widget.LinearLayout[2]/android.widget.CheckBox[1]"
         el_xpath_click(driver,el_storage)
         screenshot(driver,'screenshot/Release_GoodsAttribute_choice_storage.png')
 
