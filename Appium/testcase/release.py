@@ -65,7 +65,7 @@ def add_photo(driver):
         screenshot(driver,'screenshot/Release_1_Photo_init_page.png')
 
         sleep(1)
-        el = "//android.widget.GridView[1]/android.widget.FrameLayout[2]/android.widget.CheckBox"
+        el = "//android.widget.GridView[1]/android.widget.FrameLayout[2]/android.widget.CheckBox[1]"
         #el_xpath_click(driver,e1)
         driver.find_element_by_xpath("//android.widget.CheckBox").click()
         sleep(1)
@@ -126,9 +126,11 @@ def choice_brand(driver):
     else:
         screenshot(driver,'screenshot/Release_Brand_select_finish.png')
 
-def goods_attribute_select(driver):
-    el_storage = "//android.widget.LinearLayout[5]/android.widget.GridView[1]/android.widget.LinearLayout[2]/android.widget.CheckBox[1]"
-    el_xpath_click(driver,el_storage)
+def goods_attrib_select(driver,attrib_name,attrib_content): 
+    el = "//android.widget.LinearLayout[attribute_name_num]/android.widget.GridView[1]/android.widget.LinearLayout[attribute_content_num]/android.widget.CheckBox[1]"
+
+    attribute_name = el.replace("attribute_name_num",attrib_name).replace("attribute_content_num",attrib_content)
+    el_xpath_click(driver,attribute_name)
 
 # 手机类商品属性规格
 def goods_attribute(driver):
@@ -136,23 +138,34 @@ def goods_attribute(driver):
         el_click(driver,cfg.get('release','goods_attribute'))
         screenshot(driver,'screenshot/Release_GoodsAttribute_init_page.png')
 
-        el_storage = "//android.widget.LinearLayout[1]/android.widget.GridView[1]/android.widget.LinearLayout[2]/android.widget.CheckBox[1]"
-        el_xpath_click(driver,el_storage)
-        screenshot(driver,'screenshot/Release_GoodsAttribute_choice_storage.png')
+        #el_storage = "//android.widget.LinearLayout[1]/android.widget.GridView[1]/android.widget.LinearLayout[2]/android.widget.CheckBox[1]"
+        #el_xpath_click(driver,el_storage)
+        # 存储容量、手机维修、手机保修、手机外观、屏幕情况
+        goods_attrib_select(driver,"1","2")
+        goods_attrib_select(driver,"2","2")
+        goods_attrib_select(driver,"3","2")
+        goods_attrib_select(driver,"4","2")
+        goods_attrib_select(driver,"5","2")
+        screenshot(driver,'screenshot/Release_GoodsAttribute_choice_swipe_before.png')
 
-        for c in range(3):
-            sw.down_swipe(driver)
+        # 滑动到底部
+        sw.down_swipe(driver)
+        
+        # 购买渠道、全新非全新
+        goods_attrib_select(driver,"5","2")
+        goods_attrib_select(driver,"6","2")
+        screenshot(driver,'screenshot/Release_GoodsAttribute_finish.png')
+        
     except:
         screenshot(driver,'screenshot/Release_GoodsAttribute_error.png')
         pass
     else:
         el_click(driver,cfg.get('release','complete'))
-        screenshot(driver,'screenshot/Release_GoodsAttribute_select_finish.png')
+        screenshot(driver,'screenshot/Release_GoodsAttribute_end.png')
 
 
 # 商品发布
 def release_goods(driver):
-    el_click(driver,cfg.get('release','main_release'))
 
     # 选择照片
     add_photo(driver)
@@ -195,16 +208,22 @@ def release_goods(driver):
     el_click(driver,cfg.get('release','free_postage'))
 
     # 点击确定发布或下一步
-    try:
+    btn_content = el_text(driver,cfg.get('release','determine_release_btn'))
+
+    btn_next_content = u"下一步"
+
+    if btn_next_content in btn_content:
         screenshot(driver,'screenshot/Release_first_page_end.png')
         el_click(driver,cfg.get('release','release_next'))
         screenshot(driver,'screenshot/Release_second_page_start.png')
-    except:
+        # 选择品牌
+        choice_brand(driver)
+        # 属性规格
+        goods_attribute(driver)
+
+        el_click(driver,cfg.get('release','determine_release_btn'))        
+        screenshot(driver,'screenshot/Release_TwoPage_finish.png')
+    else:
         el_click(driver,cfg.get('release','determine_release_btn'))        
         screenshot(driver,'screenshot/Release_OnePage_finish.png')
 
-    # 选择品牌
-    choice_brand(driver)
-
-    # 属性规格
-    goods_attribute(driver)
