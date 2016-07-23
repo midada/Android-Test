@@ -7,9 +7,6 @@ from time import sleep
 from appium import webdriver
 
 # element locators
-# find_element_by_id().click 
-# find_element_by_id().send_keys()
-
 def el_click(driver,el):
     return driver.find_element_by_id(el).click()
 
@@ -18,6 +15,9 @@ def el_xpath_click(driver,el):
 
 def el_send_keys(driver,el,data):
     return driver.find_element_by_id(el).send_keys(data)
+
+def screenshot(driver,filename):
+    return driver.get_screenshot_as_file(filename)
 
 # Swipe: Left Right Up Down
 class MobileSwipe():
