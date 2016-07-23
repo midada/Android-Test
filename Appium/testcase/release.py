@@ -53,11 +53,14 @@ def add_photo(driver):
             在选择图片页面,从上到下,第一张照片: FrameLayout为[1]
     """
     try:
-        el = "//android.widget.GridView[1]/android.widget.FrameLayout[3]/android.widget.ImageView[1]"
-        el_xpath_click(driver,el)
+        sleep(1)
+        el = "//android.widget.GridView[1]/android.widget.FrameLayout[2]/android.widget.CheckBox"
+        #el_xpath_click(driver,e1)
+        driver.find_element_by_xpath("//android.widget.CheckBox").click()
+        sleep(1)
     except:
-        pass
-    finally:
+        return False
+    else:
         el_click(driver,cfg.get('release','ok'))
 
 # 录制视频
@@ -73,7 +76,7 @@ def add_video(driver):
             若添加图片视频区域进行了滑动操作,添加视频框输入第一个，则RelativeLayout为[1]
     """
     try:
-        el = "android.support.v7.widget.RecyclerView[1]/android.widget.RelativeLayout[3]/android.widget.ImageView[1]"
+        el = "//android.support.v7.widget.RecyclerView[1]/android.widget.RelativeLayout[3]/android.widget.ImageView[1]"
         el_xpath_click(driver,el)
 
         # click capture Video btn
@@ -87,21 +90,23 @@ def add_video(driver):
     except:
         pass
 
+# 选择品牌
+def choice_brand(driver):
+    el_click(driver,cfg.get('release','choice_brand'))
+    try:
+        el = "//android.widget.ListView[1]/android.widget.LinearLayout[2]/android.widget.LinearLayout[1]"
+        el_xpath_click(driver,el)
+    except:
+        return False    
+
 # 手机类商品属性规格
-def goods_attribute(dirver):
+def goods_attribute(driver):
     el_click(driver,cfg.get('release','goods_attribute'))
 
-    driver.find_element_by_xpath("//android.widget.TextView[contains(@text,'16G'])").click()
-    driver.find_element_by_xpath("//android.widget.TextView[contains(@text,'维修'])").click()
-    driver.find_element_by_xpath("//android.widget.TextView[contains(@text,'在保'])").click()
-    driver.find_element_by_xpath("//android.widget.TforextView[contains(@text,'外观完好'])").click()
-    driver.find_element_by_xpath("//android.widget.TextView[contains(@text,'正常显示'])").click()
-
+    el = "//android.widget.GridView[1]/android.widget.LinearLayout[2]/android.widget.CheckBox[1]"
+    el_xpath_click(driver,el)
     for c in range(3):
         sw.down_swipe(driver)
-
-    driver.find_element_by_xpath("//android.widget.TforextView[contains(@text,'大陆国行'])").click()
-    driver.find_element_by_xpath("//android.widget.TextView[contains(@text,'拆封'])").click()
 
     el_click(driver,cfg.get('release','complete'))
 
@@ -126,7 +131,7 @@ def release_goods(driver):
     el_send_keys(driver,cfg.get('release','goods_describe'),goods_describe)
 
     # 增加视频
-    video_recording(driver)
+    add_video(driver)
 
     # 商品所在地
     el_click(driver,cfg.get('release','goods_location'))
@@ -144,13 +149,11 @@ def release_goods(driver):
     # 点击确定发布或下一步
     try:
         el_click(driver,cfg.get('release','release_next'))
-        # 选择品牌
-        el_click(driver,cfg.get('release','choice_brand'))
-        el_xpath_click(driver,"/android.widget.ListView[1]/android.widget.LinearLayout[1]")
-        sleep(2)
-
-        goods_attribute(driver)
     except:
         el_click(driver,cfg.get('release','determine_release_btn'))        
 
+    # 选择品牌
+    choice_brand(driver)
 
+    # 属性规格
+    goods_attribute(driver)
