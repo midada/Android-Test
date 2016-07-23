@@ -15,6 +15,7 @@ import screenshot
 from common import MobileSwipe
 from testcase.account import login
 from testcase.release import release_goods
+from testcase.intro import intro
 
 # set config.ini
 cfg = ConfigParser()
@@ -43,11 +44,7 @@ class TestAndroidJiuai(unittest.TestCase):
     
     # Swipe:app Guide page 
     def test_initialize(self):
-        sleep(3)
-        for c in range(5):
-            self.sw.left_swipe(self.driver)
-        self.driver.find_element_by_xpath("//android.widget.ImageView").click()
-        sleep(3)
+        intro(self.driver)
         #self.assertEqual('.activity.MainActivity',self.driver.current_activity)
 
     # User Register
