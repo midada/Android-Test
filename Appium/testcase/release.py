@@ -14,6 +14,7 @@ from appium.webdriver.common.touch_action import TouchAction
 
 from common import screenshot
 from common import el_click,el_send_keys,el_xpath_click
+from common import el_text
 from common import MobileSwipe
 
 # config.ini
@@ -166,11 +167,20 @@ def release_goods(driver):
     add_video(driver)
 
     # 商品所在地
-    el_click(driver,cfg.get('release','goods_location'))
-    el_click(driver,cfg.get('release','goods_location_btn'))
+    el_location = el_text(driver,cfg.get('release','goods_location'))
+    locate_fail_content = u'位置获取失败'
+    
+    if locate_fail_content in el_location:
+        el_click(driver,cfg.get('release','goods_location'))
+        screenshot(driver,'screenshot/Release_select_goods_location.png')
+        el_click(driver,cfg.get('release','goods_location_btn'))
+    else:
+        pass
 
+    screenshot(driver,'screenshot/Release_pageSwipe_begin.png')
     for c in range(3):
         sw.down_swipe(driver)
+    screenshot(driver,'screenshot/Release_pageSwipe_behind.png')
 
     # 商品原价、商品售价、是否包邮
     sleep(2)
@@ -180,9 +190,12 @@ def release_goods(driver):
 
     # 点击确定发布或下一步
     try:
+        screenshot(driver,'screenshot/Release_first_page_end.png')
         el_click(driver,cfg.get('release','release_next'))
+        screenshot(driver,'screenshot/Release_second_page_start.png')
     except:
         el_click(driver,cfg.get('release','determine_release_btn'))        
+        screenshot(driver,'screenshot/Release_OnePage_finish.png')
 
     # 选择品牌
     choice_brand(driver)
