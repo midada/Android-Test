@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 #-*- coding:utf-8  -*-
 
-# 将选择商品分类、添加照片、添加视频、选择品牌、填写属性信息，单独编写    
+# @auther:jiuai
+# 2016/07/24
 # TestCase:商品发布
 
 import os,sys
@@ -127,10 +128,20 @@ def choice_brand(driver):
         screenshot(driver,'screenshot/Release_Brand_select_finish.png')
 
 def goods_attrib_select(driver,attrib_name,attrib_content): 
+    """ attrib_name: 商品属性规格名称
+           1.存储容量、手机维修、手机保修、手机外观、屏幕情况、购买情况、全新非全新
+           2.在未滑动屏幕时，从上到下，元素定位:
+               //android.widget.LinearLayout[1]  1 2 3 ...
+        attrib_content: 属性内容 LinearLayout 1 2 3 ..
+
+        Usage:
+            goods_attrib_select(driver,1,1)
+    """
     el = "//android.widget.LinearLayout[attribute_name_num]/android.widget.GridView[1]/android.widget.LinearLayout[attribute_content_num]/android.widget.CheckBox[1]"
 
-    attribute_name = el.replace("attribute_name_num",attrib_name).replace("attribute_content_num",attrib_content)
-    el_xpath_click(driver,attribute_name)
+    attribute = el.replace("attribute_name_num",attrib_name).replace("attribute_content_num",attrib_content)
+
+    el_xpath_click(driver,attribute)
 
 # 手机类商品属性规格
 def goods_attribute(driver):
@@ -138,8 +149,6 @@ def goods_attribute(driver):
         el_click(driver,cfg.get('release','goods_attribute'))
         screenshot(driver,'screenshot/Release_GoodsAttribute_init_page.png')
 
-        #el_storage = "//android.widget.LinearLayout[1]/android.widget.GridView[1]/android.widget.LinearLayout[2]/android.widget.CheckBox[1]"
-        #el_xpath_click(driver,el_storage)
         # 存储容量、手机维修、手机保修、手机外观、屏幕情况
         goods_attrib_select(driver,"1","2")
         goods_attrib_select(driver,"2","2")
@@ -158,7 +167,6 @@ def goods_attribute(driver):
         
     except:
         screenshot(driver,'screenshot/Release_GoodsAttribute_error.png')
-        pass
     else:
         el_click(driver,cfg.get('release','complete'))
         screenshot(driver,'screenshot/Release_GoodsAttribute_end.png')
