@@ -22,10 +22,15 @@ from common import MobileSwipe
 cfg = ConfigParser()
 cfg.read('config.ini')
 
+# jiuai_data.dat
+tdi= ConfigParser()
+tdi.read('jiuai_data.dat')
+
+# 滑动
 sw = MobileSwipe()
 
 # set goods data
-goods_title = u'魅族手机pro 64G'
+goods_title = tdi.get('release','goods_title')
 goods_describe = u'PRO 6采用了压力感应屏幕，魅族称其为3D Press，并搭载了索尼IMX 230摄像头'
 goods_original_price = '1999'
 goods_sale_price = '1200'
