@@ -120,7 +120,7 @@ def do(phone_sn,old_dir,new_dir,package):
 
     for (oapk,napk) in zip(old_apk,new_apk):
         try:
-            print("\n-------------------------------------------")
+            print("-------------------------------------------")
             cleanup(phone_sn,package)
             # install old version apk
             os.chdir(old_dir)
@@ -132,6 +132,7 @@ def do(phone_sn,old_dir,new_dir,package):
             # install new version apk
             os.chdir(new_dir)
             nresults = install_apk(phone_sn,napk,package)
+            print(" -> This is {0} apk".format(new_apk.index(napk) + 1 ))
         except:
             print(" Install New Apk Fail")
         else:
