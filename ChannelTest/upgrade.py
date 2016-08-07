@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
-# 2016-06-09 
+# 2016-06-09
 
 __auther__ = "youxian_tester <sx.work@outlook.com->"
 __version__ = "v1.2"
@@ -12,6 +12,9 @@ import pickle
 import csv
 from diagnostics import InfoGathering
 from mobileDetecting import device_detecting
+
+#获取当前目录
+script_dir = os.getcwd()
 
 #获取手机的sn
 print("\n %s" % device_detecting())
@@ -53,11 +56,12 @@ aig = InfoGathering()
 def apk_check_before_upgrade(phone_sn,com_package_name):
     #获取手机安装的所有第三方包
     tp = [ plp.strip().split(":")[1] for plp in os.popen("adb -s {0} shell pm list package -3".format(phone_sn)) ]
+
     if com_package_name in tp:
         print("\n Old app is installed the phone.\n")
+
         #获取apk三个信息：versionName,versionCode,LastUpdatetime
         before_upgrade_version_info = aig.package_info(phone_sn,com_package_name)
-        print(before_upgrade_version_info)
         before_upgrade_version_info[0] = com_package_name
         print(" -> Version Basic info:\n\t {0}".format(before_upgrade_version_info))
     else:
@@ -69,21 +73,23 @@ def install_apk(phone_sn,apkname,com_package_name):
         install_log = os.popen("adb -s {0} install -r {1}".format(phone_sn,apkname)).read()
         if "Success" in pickle.dumps(install_log):
             install_status = 'Success'
+
             #获取apk三个信息：versionName,versionCode,LastUpdatetime
             after_upgrade_version_info = aig.package_info(phone_sn,com_package_name)
             after_upgrade_version_info[0] = apkname
             after_upgrade_version_info.insert(1,install_status)
-            print("{0} : Upgrade Successful.".format(apkname))
-            print("\t After Upgrade: {0} \n".format(after_upgrade_version_info))
+
+            print("{0} : Apk Install Successful.".format(apkname))
+            print("\t Apk Info: {0} \n".format(after_upgrade_version_info))
         else:
             after_upgrade_version_info = []
-            print("{0} : Upgrade Fail.".format(apkname))
+            print("{0} : Apk Install Fail.".format(apkname))
     except OSError:
         print("Error")
     else:
         # clean Mobile app data
         os.popen("adb -s {0} shell pm clear {1}".format(phone_sn,com_package_name))
-        print(after_upgrade_version_info)
+
     return after_upgrade_version_info
 
 #选择apk
@@ -114,6 +120,7 @@ def do(phone_sn,old_dir,new_dir,package):
 
     for (oapk,napk) in zip(old_apk,new_apk):
         try:
+            print("\n-------------------------------------------")
             cleanup(phone_sn,package)
             # install old version apk
             os.chdir(old_dir)
@@ -129,8 +136,8 @@ def do(phone_sn,old_dir,new_dir,package):
             print(" Install New Apk Fail")
         else:
             #随机monkey事件，检验新app的是否可以正常使用
-            run_events(phone_sn) 
-        
+            run_events(phone_sn)
+
         results.append(oresults + nresults)
     return results
 
@@ -142,7 +149,6 @@ test_results = do(phone_sn,old_version_catalogue,new_version_catalogue,com_packa
 print(test_results)
 
 #测试结果存放目录
-script_dir = os.getcwd()
 os.chdir(script_dir)
 with open('upgrade&install_testResult.csv','wb') as f:
     w = csv.writer(f)
