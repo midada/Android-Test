@@ -61,18 +61,20 @@ def cleanup(phone_sn,package):
 
 #将日志写入文件
 def log(phone_sn):
-    return os.popen("adb -s {0} shell logcat *:W > monkey.txt")
+    return os.popen("adb -s {0} shell logcat -d *:W > monkey.txt")
     
 try:
     #获取手机的sn
+    print("\n %s" % device_detecting())
+    phone_sn = raw_input(" \n -> Please input mobile brand to connect:")
+        
     try:
-        print("\n %s" % device_detecting())
-        phone_sn = raw_input(" \n -> Please input mobile brand to connect:")
         cleanup(phone_sn,com_package_name)
+        run_events(phone_sn)
     except Exception,e:
         print(e)
     finally:
-        run_events(phone_sn)
         log(phone_sn)
+        
 except Exception,e:
     print(e)
